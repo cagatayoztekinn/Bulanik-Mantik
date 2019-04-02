@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -20,6 +21,63 @@ namespace Bulanik_Mantik
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            label4.Parent = chart1;
+            label5.Parent = chart1;
+            label6.Parent = chart1;
+            double maxDataPoint = chart1.ChartAreas[0].AxisY.Maximum;
+            double minDataPoint = chart1.ChartAreas[0].AxisY.Minimum;
+
+            //LineAnnotation annotation2 = new LineAnnotation();
+            //annotation2.IsSizeAlwaysRelative = false;
+            //annotation2.AxisX = chart1.ChartAreas[0].AxisX;
+            //annotation2.AxisY = chart1.ChartAreas[0].AxisY;
+            //annotation2.AnchorY = minDataPoint;
+            //annotation2.Height = maxDataPoint - minDataPoint;;
+            //annotation2.Width = 0;
+            //annotation2.LineWidth = 2;
+            //annotation2.StartCap = LineAnchorCapStyle.None;
+            //annotation2.EndCap = LineAnchorCapStyle.None;
+            //annotation2.AnchorX = 5;  // <- your point
+            //annotation2.LineColor = Color.Pink; // <- your color
+            //chart1.Annotations.Add(annotation2);
+
+            List<Point> p = new List<Point>();
+            p.Add(new Point(0, 0));
+            p.Add(new Point(5, 1));
+            p.Add(new Point(6, 1));
+            p.Add(new Point(7, 0));
+
+
+            List<Point> p2 = new List<Point>();
+            p.Add(new Point(1, 0));
+            p.Add(new Point(6, 1));
+            p.Add(new Point(7, 1));
+            p.Add(new Point(8, 0));
+
+            var result = p.Intersect(p2);
+
+            var fl = new FuzzyLogicCore();
+            //fl.HassaslikKesisim(2.75);
+            var x = getnode(new Point(1, 1), new Point(10, 10), new Point(2, 2), new Point(2, 15));
+
+        }
+        public PointF getnode(Point A, Point B, Point C, Point D)
+        {
+            double dy1 = B.Y - A.Y;
+            double dx1 = B.X - A.X;
+            double dy2 = D.Y - C.Y;
+            double dx2 = D.X - C.X;
+            PointF p = new PointF();
+            // check whether the two line parallel
+            if (dy1 * dx2 == dy2 * dx1)
+                return new PointF(0, 0);
+            else
+            {
+                double x = ((C.Y - A.Y) * dx1 * dx2 + dy1 * dx2 * A.X - dy2 * dx1 * C.X) / (dy1 * dx2 - dy2 * dx1);
+                double y = A.Y + (dy1 / dx1) * (x - A.X);
+                p = new PointF((float)x, (float)y);
+                return p;
+            }
 
         }
 
@@ -30,24 +88,24 @@ namespace Bulanik_Mantik
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Series series = new Series();
-            series.ChartType = SeriesChartType.Area;
-            series.Points.AddXY(5,0);
-            series.Points.AddXY(8,0.7);
-            series.Points.AddXY(12,0.89);
-            series.Points.AddXY(15,0);
-            series.Color = Color.FromArgb(50,220,25,0);
-            
+            //Series series = new Series();
+            //series.ChartType = SeriesChartType.Area;
+            //series.Points.AddXY(5, 0);
+            //series.Points.AddXY(8, 0.7);
+            //series.Points.AddXY(12, 0.89);
+            //series.Points.AddXY(15, 0);
+            //series.Color = Color.FromArgb(50, 220, 25, 0);
 
-            chart1.Series.Add(series);
+            trackBar1.Maximum += 50;
+            //chart1.Series.Add(series);
 
         }
 
         private void trackBar1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button==MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)
             {
-               // button2.Location=new Point(e.X,button2.Location.Y);
+                // button2.Location=new Point(e.X,button2.Location.Y);
 
             }
         }
@@ -55,10 +113,29 @@ namespace Bulanik_Mantik
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
 
-            double ratio = (double)trackBar1.Maximum / ((double) trackBar1.Size.Width -33);
+        }
 
-            var temp = (int) ((trackBar1.Value/ratio) +15+ trackBar1.Location.X);
-            button2.Location=new Point(temp,button2.Location.Y);
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {
+            FuzzyLogicCore core= new FuzzyLogicCore();
+            TrackBar tb = sender as TrackBar;
+            NumericUpDown nud=  tb.Parent.Controls.OfType<NumericUpDown>().First();
+            int indis = int.Parse(Regex.Replace(tb.Name, "\\D*", ""));
+            if (e == null) tb.Value = (int) (nud.Value*1000);
+            var temp = (double)tb.Value / 1000;
+            var chart = tb.Parent.Controls.OfType<Panel>().First().Controls.OfType<Chart>().First();
+            double X=temp > 0 ? temp : 0.03;
+            if(e!=null) nud.Value = (decimal)X;
+            chart.Series[3].Points[0].XValue = X;
+            chart.Series[3].Points[0].Label =(core.KesisimHesapla(temp, (FuzzyLogicCore.KESISIM) (indis - 1)).Min().ToString() + ".000").Substring(0,5);
+
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            if(!(sender as Control).Focused) return;
+            TrackBar tb = (sender as Control).Parent.Controls.OfType<TrackBar>().First();
+            trackBar2_Scroll(tb, null);
         }
     }
 }

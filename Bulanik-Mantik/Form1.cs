@@ -14,6 +14,7 @@ namespace Bulanik_Mantik
 {
     public partial class Form1 : Form
     {
+        FuzzyLogicCore core= new FuzzyLogicCore();
         public Form1()
         {
             InitializeComponent();
@@ -24,8 +25,20 @@ namespace Bulanik_Mantik
             label4.Parent = chart1;
             label5.Parent = chart1;
             label6.Parent = chart1;
+
+            label7.Parent = chart2;
+            label2.Parent = chart2;
+            label3.Parent = chart2;
+
+            label10.Parent = chart3;
+            label11.Parent = chart3;
+            label9.Parent = chart3;
+
             double maxDataPoint = chart1.ChartAreas[0].AxisY.Maximum;
             double minDataPoint = chart1.ChartAreas[0].AxisY.Minimum;
+            trackBar2_Scroll(trackBar1,null);
+            trackBar2_Scroll(trackBar2,null);
+            trackBar2_Scroll(trackBar3,null);
 
             //LineAnnotation annotation2 = new LineAnnotation();
             //annotation2.IsSizeAlwaysRelative = false;
@@ -88,6 +101,31 @@ namespace Bulanik_Mantik
 
         private void button1_Click(object sender, EventArgs e)
         {
+
+            flowLayoutPanel1.Controls.Clear();
+            flowLayoutPanel1.SuspendLayout();
+          
+            foreach (var list1 in core.KesisimList[0])
+            {
+                foreach (var list2 in core.KesisimList[1])
+                {
+                    foreach (var list3 in core.KesisimList[2])
+                    {
+                       KuralComponent kural=new KuralComponent(list1,list2,list2);
+                       flowLayoutPanel1.Controls.Add(kural);
+                    }
+                }
+                
+            }
+            flowLayoutPanel1.ResumeLayout();
+
+
+
+
+
+
+
+
             //Series series = new Series();
             //series.ChartType = SeriesChartType.Area;
             //series.Points.AddXY(5, 0);
@@ -96,7 +134,7 @@ namespace Bulanik_Mantik
             //series.Points.AddXY(15, 0);
             //series.Color = Color.FromArgb(50, 220, 25, 0);
 
-            trackBar1.Maximum += 50;
+            //trackBar1.Maximum += 50;
             //chart1.Series.Add(series);
 
         }
@@ -117,7 +155,7 @@ namespace Bulanik_Mantik
 
         private void trackBar2_Scroll(object sender, EventArgs e)
         {
-            FuzzyLogicCore core= new FuzzyLogicCore();
+            
             TrackBar tb = sender as TrackBar;
             NumericUpDown nud=  tb.Parent.Controls.OfType<NumericUpDown>().First();
             int indis = int.Parse(Regex.Replace(tb.Name, "\\D*", ""));
@@ -136,6 +174,11 @@ namespace Bulanik_Mantik
             if(!(sender as Control).Focused) return;
             TrackBar tb = (sender as Control).Parent.Controls.OfType<TrackBar>().First();
             trackBar2_Scroll(tb, null);
+        }
+
+        private void Label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

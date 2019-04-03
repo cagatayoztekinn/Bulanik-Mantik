@@ -25,6 +25,22 @@ namespace Bulanik_Mantik
             label3.Text = kural3;
             this.ResumeLayout();
         }
+        public KuralComponent(Kural kural) : this()
+        {
+            this.SuspendLayout();
+            label1.Text = kural.ToString(Kural.StringType.Hassas);
+            label2.Text = kural.ToString(Kural.StringType.Miktr);
+            label3.Text = kural.ToString(Kural.StringType.Kirli);
+
+
+            label5.Text = kural.x1.ToString();
+            label7.Text = kural.x2.ToString();
+            label9.Text = kural.x3.ToString();
+
+
+
+            this.ResumeLayout();
+        }
 
         private void Label2_Click(object sender, EventArgs e)
         {

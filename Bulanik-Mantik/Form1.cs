@@ -102,17 +102,27 @@ namespace Bulanik_Mantik
         private void button1_Click(object sender, EventArgs e)
         {
 
+            double x1, x2, x3;
+            x1 = (double)numericUpDown1.Value;
+            x2 = (double)numericUpDown2.Value;
+            x3 = (double)numericUpDown3.Value;
+
             flowLayoutPanel1.Controls.Clear();
             flowLayoutPanel1.SuspendLayout();
-          
+            List<Kural> kurallar= new List<Kural>();
             foreach (var list1 in core.KesisimList[0])
             {
                 foreach (var list2 in core.KesisimList[1])
                 {
                     foreach (var list3 in core.KesisimList[2])
                     {
-                       KuralComponent kural=new KuralComponent(list1,list2,list2);
-                       flowLayoutPanel1.Controls.Add(kural);
+                       
+                       Kural kural = new Kural(list1, list2, list3);
+                       kural.XValues(x1,x2,x3);
+                       kurallar.Add(kural);
+
+                       KuralComponent kuralComp=new KuralComponent(kural);
+                       flowLayoutPanel1.Controls.Add(kuralComp);
                     }
                 }
                 
@@ -120,8 +130,44 @@ namespace Bulanik_Mantik
             flowLayoutPanel1.ResumeLayout();
 
 
+            Tuple<double, double> agirlikliDonusOrtTuple;
+            for (int i = 0; i < 5; i++)
+            {
+                Kural.Donus donus = (Kural.Donus)i;
+                var item = kurallar.Where(a => a.DonusHizi == donus);
+                if (item.Count()>0)
+                {
+                    var maxItem = item.First(a=>a.GetMinX==item.Max(b => b.GetMinX));
+                    agirlikliDonusOrtTuple =new Tuple<double, double>(maxItem.GetMinX,maxItem.AğırlıkGetir(Kural.AgirlikMerkez.Donus));
+                }
+            }
 
 
+            List<Tuple<double, double>> agirlikliDeterjanOrtTuple=new List<Tuple<double, double>>();
+            for (int i = 0; i < 5; i++)
+            {
+                Kural.Deterjan deterjan = (Kural.Deterjan)i;
+                var item = kurallar.Where(a => a.DeterjanMiktari == deterjan);
+                if (item.Count()>0)
+                {
+                    var maxItem = item.First(a=>a.GetMinX==item.Max(b => b.GetMinX));
+                    agirlikliDeterjanOrtTuple.Add(new Tuple<double, double>(maxItem.GetMinX,maxItem.AğırlıkGetir(Kural.AgirlikMerkez.Deterjan)));
+                }
+            }
+
+            agirlikliDeterjanOrtTuple.AgirlikliOrtalamaExt(a => a.Item1, b => b.Item2);
+
+            Tuple<double, double> agirlikliSureOrtTuple;
+            for (int i = 0; i < 5; i++)
+            {
+                Kural.Sure sure = (Kural.Sure)i;
+                var item = kurallar.Where(a => a.Suresi == sure);
+                if (item.Count()>0)
+                {
+                    var maxItem = item.First(a=>a.GetMinX==item.Max(b => b.GetMinX));
+                    agirlikliSureOrtTuple =new Tuple<double, double>(maxItem.GetMinX,maxItem.AğırlıkGetir(Kural.AgirlikMerkez.Sure));
+                }
+            }
 
 
 

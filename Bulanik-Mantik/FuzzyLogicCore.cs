@@ -192,8 +192,37 @@ namespace Bulanik_Mantik
 
 
     }
+
+    public static class extensions
+    {
+        public static double AgirlikliOrtalamaExt<T>(this IEnumerable<T> records, Func<T, double> value, Func<T, double> weight)
+        {
+            double weightedValueSum = records.Sum(x => value(x) * weight(x));
+            double weightSum = records.Sum(x => weight(x));
+
+            if (weightSum != 0)
+                return weightedValueSum / weightSum;
+            else
+                throw new DivideByZeroException("Your message here");
+        }
+    }
     public class Kural
     {
+
+        #region Enumlar
+
+        public enum StringType
+        {
+            Hassas,
+            Miktr,
+            Kirli
+        }
+        public enum AgirlikMerkez
+        {
+            Donus,
+            Deterjan,
+            Sure
+        }
         public enum Hassas
         {
             hassas,
@@ -240,6 +269,8 @@ namespace Bulanik_Mantik
             uzun
         }
 
+        #endregion
+
         public Hassas Hassaslık { get; set; }
         public Miktr Miktar { get; set; }
         public Kirli Kirlilik { get; set; }
@@ -247,6 +278,22 @@ namespace Bulanik_Mantik
         public Donus DonusHizi { get; set; }
         public Deterjan DeterjanMiktari { get; set; }
         public Sure Suresi { get; set; }
+        public double x1 { get; set; }
+        public double x2 { get; set; }
+        public double x3 { get; set; }
+
+        public double GetMinX
+        {
+            get
+            {
+                List<double> list = new List<double>();
+                list.Add(x1);
+                list.Add(x2);
+                list.Add(x3);
+                return list.Min();
+            }
+        }
+
         public Kural(Hassas Hassaslık, Miktr Miktar, Kirli kirlilik)
         {
             this.Hassaslık = Hassaslık;
@@ -255,6 +302,167 @@ namespace Bulanik_Mantik
             Kurallar();
         }
 
+
+
+        public Kural(string Hassaslık, string Miktar, string kirlilik)
+        {
+            Hassas h = default;
+            Miktr m = default;
+            Kirli k = default;
+            switch (Hassaslık)
+            {
+                case "Sağlam":
+                    h = Hassas.sağlam;
+                    break;
+                case "Orta":
+                    h = Hassas.orta;
+                    break;
+                case "Hassas":
+                    h = Hassas.hassas;
+                    break;
+            }
+
+            switch (Miktar)
+            {
+                case "Küçük":
+                    m = Miktr.küçük;
+                    break;
+                case "Orta":
+                    m = Miktr.orta;
+                    break;
+                case "Büyük":
+                    m = Miktr.büyük;
+                    break;
+            }
+
+            switch (kirlilik)
+            {
+                case "Küçük":
+                    k = Kirli.küçük;
+                    break;
+                case "Orta":
+                    k = Kirli.orta;
+                    break;
+                case "Büyük":
+                    k = Kirli.büyük;
+                    break;
+            }
+
+            this.Hassaslık = h;
+            this.Miktar = m;
+            this.Kirlilik = k;
+            Kurallar();
+
+        }
+
+        public  double AğırlıkGetir(AgirlikMerkez m)
+        {
+            double donme_agirlik = 0, sure_agirlik = 0, deterjan_agirlik = 0;
+            switch (DonusHizi)
+            {
+                case Donus.hassas:
+                    donme_agirlik = -1.15;
+                    break;
+                case Donus.normalHassas:
+                    donme_agirlik = 2.75;
+                    break;
+                case Donus.orta:
+                    donme_agirlik = 5;
+                    break;
+                case Donus.normalGuclu:
+                    donme_agirlik = 7.25;
+                    break;
+                case Donus.guclu:
+                    donme_agirlik = 11.15;
+                    break;
+            }
+
+            switch (Suresi)
+            {
+                case Sure.kısa:
+                    sure_agirlik = -1.49;
+                    break;
+                case Sure.normalKısa:
+                    sure_agirlik = 39.9;
+                    break;
+                case Sure.orta:
+                    sure_agirlik = 57.5;
+                    break;
+                case Sure.normalUzun:
+                    sure_agirlik = 75.1;
+                    break;
+                case Sure.uzun:
+                    sure_agirlik = 102.15;
+                    break;
+            }
+
+
+            switch (DeterjanMiktari)
+            {
+                case Deterjan.cokAz:
+                    deterjan_agirlik = 10;
+                    break;
+                case Deterjan.az:
+                    deterjan_agirlik = 85;
+                    break;
+                case Deterjan.orta:
+                    deterjan_agirlik = 150;
+                    break;
+                case Deterjan.fazla:
+                    deterjan_agirlik = 215;
+                    break;
+                case Deterjan.cokFazla:
+                    deterjan_agirlik = 290;
+                    break;
+            }
+
+            switch (m)
+            {
+                case AgirlikMerkez.Donus: return donme_agirlik;
+                case AgirlikMerkez.Deterjan: return deterjan_agirlik;
+                case AgirlikMerkez.Sure: return sure_agirlik;
+            }
+            return 0;
+        }
+
+
+        public void XValues(Double x1, Double x2, Double x3)
+        {
+            this.x1 = x1;
+            this.x2 = x2;
+            this.x3 = x3;
+        }
+        public string ToString(StringType type)
+        {
+            switch (type)
+            {
+                case StringType.Hassas:
+                    switch (Hassaslık)
+                    {
+                        case Hassas.sağlam: return "Sağlam";
+                        case Hassas.orta: return "Orta";
+                        case Hassas.hassas: return "Hassas";
+                    }
+                    break;
+                case StringType.Miktr:
+                    switch (Miktar)
+                    {
+                        case Miktr.küçük: return "Küçük";
+                        case Miktr.orta: return "Orta";
+                        case Miktr.büyük: return "Büyük";
+                    }
+                    break;
+                case StringType.Kirli:
+                    switch (Kirlilik)
+                    {
+                        case Kirli.küçük: return "Küçük";
+                        case Kirli.orta: return "Orta";
+                        case Kirli.büyük: return "Büyük";
+                    }
+                    break;
+            }
+            return base.ToString();
+        }
         public void Kurallar()
         {
 
@@ -318,7 +526,7 @@ namespace Bulanik_Mantik
             }
 
 
-            if (Hassaslık == Hassas.orta && Miktar == Miktr.küçük  && Kirlilik == Kirli.küçük)
+            if (Hassaslık == Hassas.orta && Miktar == Miktr.küçük && Kirlilik == Kirli.küçük)
             {
                 DonusHizi = Donus.normalHassas;
                 Suresi = Sure.normalKısa;
@@ -339,7 +547,7 @@ namespace Bulanik_Mantik
 
 
 
-            if (Hassaslık == Hassas.orta && Miktar == Miktr.orta  && Kirlilik == Kirli.küçük)
+            if (Hassaslık == Hassas.orta && Miktar == Miktr.orta && Kirlilik == Kirli.küçük)
             {
                 DonusHizi = Donus.normalHassas;
                 Suresi = Sure.normalKısa;
@@ -358,8 +566,8 @@ namespace Bulanik_Mantik
                 DeterjanMiktari = Deterjan.fazla;
             }
 
-            
-            if (Hassaslık == Hassas.orta && Miktar == Miktr.büyük  && Kirlilik == Kirli.küçük)
+
+            if (Hassaslık == Hassas.orta && Miktar == Miktr.büyük && Kirlilik == Kirli.küçük)
             {
                 DonusHizi = Donus.hassas;
                 Suresi = Sure.orta;
@@ -379,8 +587,8 @@ namespace Bulanik_Mantik
             }
 
 
-            
-            if (Hassaslık == Hassas.sağlam && Miktar == Miktr.küçük  && Kirlilik == Kirli.küçük)
+
+            if (Hassaslık == Hassas.sağlam && Miktar == Miktr.küçük && Kirlilik == Kirli.küçük)
             {
                 DonusHizi = Donus.orta;
                 Suresi = Sure.orta;
@@ -400,7 +608,7 @@ namespace Bulanik_Mantik
             }
 
 
-            if (Hassaslık == Hassas.sağlam && Miktar == Miktr.orta  && Kirlilik == Kirli.küçük)
+            if (Hassaslık == Hassas.sağlam && Miktar == Miktr.orta && Kirlilik == Kirli.küçük)
             {
                 DonusHizi = Donus.orta;
                 Suresi = Sure.orta;
@@ -420,7 +628,7 @@ namespace Bulanik_Mantik
             }
 
 
-            if (Hassaslık == Hassas.sağlam && Miktar == Miktr.büyük  && Kirlilik == Kirli.küçük)
+            if (Hassaslık == Hassas.sağlam && Miktar == Miktr.büyük && Kirlilik == Kirli.küçük)
             {
                 DonusHizi = Donus.normalGuclu;
                 Suresi = Sure.normalUzun;

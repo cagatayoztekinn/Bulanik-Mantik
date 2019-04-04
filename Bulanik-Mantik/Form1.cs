@@ -22,17 +22,6 @@ namespace Bulanik_Mantik
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            label4.Parent = chart1;
-            label5.Parent = chart1;
-            label6.Parent = chart1;
-
-            label7.Parent = chart2;
-            label2.Parent = chart2;
-            label3.Parent = chart2;
-
-            label10.Parent = chart3;
-            label11.Parent = chart3;
-            label9.Parent = chart3;
 
             double maxDataPoint = chart1.ChartAreas[0].AxisY.Maximum;
             double minDataPoint = chart1.ChartAreas[0].AxisY.Minimum;

@@ -132,28 +132,14 @@ namespace Bulanik_Mantik
 
                         KuralComponent kuralComp = flowLayoutPanel1.Controls[sayici++] as KuralComponent;
                         kuralComp.SetKural(kural);
-                        //flowLayoutPanel1.Controls.Add(kuralComp);
-                        //KuralComponent kuralComp = new KuralComponent(kural);
-                        //flowLayoutPanel1.Controls.Add(kuralComp);
                         kuralComp.Visible = true;
-                        //flowLayoutPanel1.Controls.SetChildIndex(kuralComp,sayici);
-                        //flowLayoutPanel1.Controls.OfType<KuralComponent>().OrderBy(a => a.Visible).Reverse();
-
                     }
                 }
             }
 
             var count = flowLayoutPanel1.Controls.OfType<KuralComponent>().Where(a => a.Visible == true).Count();
             for (int i = sayici; i < 27; i++)
-            {
                     flowLayoutPanel1.Controls[i].Visible = false;
-                    
-            }
-
-
-
-
-
             flowLayoutPanel1.ResumeLayout();
 
 

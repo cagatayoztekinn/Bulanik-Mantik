@@ -247,10 +247,10 @@ namespace Bulanik_Mantik
 
                 noktalar.Add(new PointF((float)d1[0], 0));
 
-                sonuc = -(x - d1[0]) * (1 / Math.Abs(d1[0] - d1[1]));
+                sonuc = d1[0] + (x * (Math.Abs(d1[0] - d1[1])));
                 noktalar.Add(new PointF((float)sonuc, (float)x));
 
-                sonuc = 1 - (x - d1[2]) * (1 / Math.Abs(d1[2] - d1[3]));
+                sonuc = d1[3] - (x * (Math.Abs(d1[2] - d1[3])));
                 noktalar.Add(new PointF((float)sonuc, (float)x));
 
                 noktalar.Add(new PointF((float)d1[3], 0));
@@ -327,13 +327,10 @@ namespace Bulanik_Mantik
 
             if (areaId == 0)
             {
-
                 noktalar.Add(new PointF((float)d1[0], 0));
+                noktalar.Add(new PointF((float)d1[1], (float)x));
 
-                sonuc = -(x - d1[0]) * (1 / Math.Abs(d1[0] - d1[1]));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
-                sonuc = 1 - (x - d1[2]) * (1 / Math.Abs(d1[2] - d1[3]));
+                sonuc = d1[3] - (x * (Math.Abs(d1[2] - d1[3])));
                 noktalar.Add(new PointF((float)sonuc, (float)x));
 
                 noktalar.Add(new PointF((float)d1[3], 0));
@@ -413,10 +410,10 @@ namespace Bulanik_Mantik
 
                 noktalar.Add(new PointF((float)d1[0], 0));
 
-                sonuc = -(x - d1[0]) * (1 / Math.Abs(d1[0] - d1[1]));
+                sonuc = d1[0]+(x * (Math.Abs(d1[0] - d1[1])));
                 noktalar.Add(new PointF((float)sonuc, (float)x));
 
-                sonuc = 1 - (x - d1[2]) * (1 / Math.Abs(d1[2] - d1[3]));
+                sonuc = d1[3]- (x * (Math.Abs(d1[2] - d1[3])));
                 noktalar.Add(new PointF((float)sonuc, (float)x));
 
                 noktalar.Add(new PointF((float)d1[3], 0));
@@ -597,9 +594,9 @@ namespace Bulanik_Mantik
 
         public Kural(string Hassaslık, string Miktar, string kirlilik)
         {
-            Enums.Hassas h = default;
-            Enums.Miktr m = default;
-            Enums.Kirli k = default;
+            Enums.Hassas h = 0;
+            Enums.Miktr m = 0;
+            Enums.Kirli k = 0;
             switch (Hassaslık)
             {
                 case "Sağlam":

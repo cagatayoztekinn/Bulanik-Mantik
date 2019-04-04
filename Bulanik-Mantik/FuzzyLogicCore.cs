@@ -27,23 +27,23 @@ namespace Bulanik_Mantik
 
         public enum Hassas
         {
-            hassas,
+            sağlam,
             orta,
-            sağlam
+            hassas
         }
 
         public enum Miktr
         {
-            büyük,
+            küçük,
             orta,
-            küçük
+            büyük
         }
 
         public enum Kirli
         {
-            büyük,
+            küçük,
             orta,
-            küçük
+            büyük
         }
 
 
@@ -274,12 +274,13 @@ namespace Bulanik_Mantik
         public static double AgirlikliOrtalamaExt<T>(this IEnumerable<T> records, Func<T, double> value, Func<T, double> weight)
         {
             double weightedValueSum = records.Sum(x => value(x) * weight(x));
-            double weightSum = records.Sum(x => weight(x));
+            double weightSum = records.Sum(x => value(x));
 
             if (weightSum != 0)
                 return weightedValueSum / weightSum;
             else
-                throw new DivideByZeroException("Your message here");
+                return 0;
+                //throw new DivideByZeroException("Your message here");
         }
     }
     public class Kural
@@ -297,21 +298,15 @@ namespace Bulanik_Mantik
         public double x3 { get; set; }
 
         FuzzyLogicCore core = new FuzzyLogicCore();
-        //public double GetMinX
-        //{
-        //    get
-        //    {
-
-        //        List<double> list = new List<double>();
-
-        //        list.Add(x1);
-        //        list.Add(x2);
-        //        list.Add(x3);
-        //        return list.Min();
-        //    }
-
-        //}
-        public double GetMinX
+        public double GetMinKesisimX
+        {
+            get
+            {
+                //Minimum Seçimi
+                return GetKesisimX.Where(a=>a!=-1).Min();
+            }
+        }
+        public double[] GetKesisimX
         {
             get
             {
@@ -319,7 +314,7 @@ namespace Bulanik_Mantik
                 list.Add(core.KesisimHesapla(x1, FuzzyLogicCore.KESISIM.HASSASLIK, (int)Hassaslık).Single());
                 list.Add(core.KesisimHesapla(x2, FuzzyLogicCore.KESISIM.MIKTAR, (int)Miktar).Single());
                 list.Add(core.KesisimHesapla(x3, FuzzyLogicCore.KESISIM.KIRLILIK, (int)Kirlilik).Single());
-                return list.Where(a=>a!=-1).Min();
+                return list.ToArray();
             }
         }
 
@@ -409,7 +404,7 @@ namespace Bulanik_Mantik
             switch (Suresi)
             {
                 case Enums.Sure.kısa:
-                    sure_agirlik = -1.49;
+                    sure_agirlik = 23.79;
                     break;
                 case Enums.Sure.normalKısa:
                     sure_agirlik = 39.9;
@@ -492,7 +487,7 @@ namespace Bulanik_Mantik
             }
             return base.ToString();
         }
-        public void Kurallar()
+        private void Kurallar()
         {
 
             if (Hassaslık == Enums.Hassas.hassas && Miktar == Enums.Miktr.küçük && Kirlilik == Enums.Kirli.küçük)

@@ -25,7 +25,13 @@ namespace Bulanik_Mantik
             label3.Text = kural3;
             this.ResumeLayout();
         }
+      
         public KuralComponent(Kural kural) : this()
+        {
+            SetKural(kural);
+        }
+
+        public void SetKural(Kural kural)
         {
             this.SuspendLayout();
             label1.Text = kural.ToString(Enums.InputType.Hassas);
@@ -33,10 +39,10 @@ namespace Bulanik_Mantik
             label3.Text = kural.ToString(Enums.InputType.Kirli);
 
 
-            label5.Text = kural.x1.ToString();
-            label7.Text = kural.x2.ToString();
-            label9.Text = kural.x3.ToString();
-
+            label5.Text = kural.GetKesisimX[0].ToString();
+            label7.Text = kural.GetKesisimX[1].ToString();
+            label9.Text = kural.GetKesisimX[2].ToString();
+          
 
 
             this.ResumeLayout();

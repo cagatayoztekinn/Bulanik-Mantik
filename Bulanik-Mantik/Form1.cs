@@ -14,7 +14,7 @@ namespace Bulanik_Mantik
 {
     public partial class Form1 : Form
     {
-        FuzzyLogicCore core= new FuzzyLogicCore();
+        FuzzyLogicCore core = new FuzzyLogicCore();
         public Form1()
         {
             InitializeComponent();
@@ -22,13 +22,28 @@ namespace Bulanik_Mantik
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            label4.Parent = chart1;
+            label5.Parent = chart1;
+            label6.Parent = chart1;
+
+            label7.Parent = chart2;
+            label2.Parent = chart2;
+            label3.Parent = chart2;
+
+            label10.Parent = chart3;
+            label11.Parent = chart3;
+            label9.Parent = chart3;
 
             double maxDataPoint = chart1.ChartAreas[0].AxisY.Maximum;
             double minDataPoint = chart1.ChartAreas[0].AxisY.Minimum;
-            trackBar2_Scroll(trackBar1,null);
-            trackBar2_Scroll(trackBar2,null);
-            trackBar2_Scroll(trackBar3,null);
+            trackBar2_Scroll(trackBar1, null);
+            trackBar2_Scroll(trackBar2, null);
+            trackBar2_Scroll(trackBar3, null);
 
+            for (int i = 0; i < 27; i++)
+            {
+                flowLayoutPanel1.Controls.Add(new KuralComponent() { Visible = false });
+            }
             //LineAnnotation annotation2 = new LineAnnotation();
             //annotation2.IsSizeAlwaysRelative = false;
             //annotation2.AxisX = chart1.ChartAreas[0].AxisX;
@@ -91,76 +106,102 @@ namespace Bulanik_Mantik
         private void button1_Click(object sender, EventArgs e)
         {
 
+            if (flowLayoutPanel1.Controls.Count !=27) return;
+
+            int sayici = 0;
+
             double x1, x2, x3;
             x1 = (double)numericUpDown1.Value;
             x2 = (double)numericUpDown2.Value;
             x3 = (double)numericUpDown3.Value;
 
-            flowLayoutPanel1.Controls.Clear();
+            // flowLayoutPanel1.Controls.Clear();
             flowLayoutPanel1.SuspendLayout();
-            List<Kural> kurallar= new List<Kural>();
+            List<Kural> kurallar = new List<Kural>();
+
             foreach (var list1 in core.KesisimList[0])
             {
                 foreach (var list2 in core.KesisimList[1])
                 {
                     foreach (var list3 in core.KesisimList[2])
                     {
-                       
-                       Kural kural = new Kural(list1, list2, list3);
-                       kural.XValues(x1,x2,x3);
-                       kurallar.Add(kural);
 
-                       KuralComponent kuralComp=new KuralComponent(kural);
-                       flowLayoutPanel1.Controls.Add(kuralComp);
+                        Kural kural = new Kural(list1, list2, list3);
+                        kural.XValues(x1, x2, x3);
+                        kurallar.Add(kural);
+
+                        KuralComponent kuralComp = flowLayoutPanel1.Controls[sayici++] as KuralComponent;
+                        kuralComp.SetKural(kural);
+                        //flowLayoutPanel1.Controls.Add(kuralComp);
+                        //KuralComponent kuralComp = new KuralComponent(kural);
+                        //flowLayoutPanel1.Controls.Add(kuralComp);
+                        kuralComp.Visible = true;
+                        //flowLayoutPanel1.Controls.SetChildIndex(kuralComp,sayici);
+                        //flowLayoutPanel1.Controls.OfType<KuralComponent>().OrderBy(a => a.Visible).Reverse();
+
                     }
                 }
-                
             }
+
+            var count = flowLayoutPanel1.Controls.OfType<KuralComponent>().Where(a => a.Visible == true).Count();
+            for (int i = sayici; i < 27; i++)
+            {
+                    flowLayoutPanel1.Controls[i].Visible = false;
+                    
+            }
+
+
+
+
+
             flowLayoutPanel1.ResumeLayout();
 
 
-           
-            List<Tuple<double, double>> agirlikliDonusOrtTuple=new List<Tuple<double, double>>();
+            // <<Kurala ait Minimum kesişimi> , <Minimum değere sahip ara değer grafiğinin ağırlığı>>
+            List<Tuple<double, double>> agirlikliDonusOrtTuple = new List<Tuple<double, double>>(); 
             for (int i = 0; i < 5; i++)
             {
                 Enums.Donus donus = (Enums.Donus)i;
-                var item = kurallar.Where(a => a.DonusHizi == donus);
-                if (item.Count()>0)
+                var item = kurallar.Where(a => a.DonusHizi == donus); //Çıktı Grafiğinin Ara değer grafiklerine karşılık gelen Enumlarını getir
+                if (item.Count() > 0)
                 {
-                    var maxItem = item.First(a=>a.GetMinX==item.Max(b => b.GetMinX));
-                    agirlikliDonusOrtTuple.Add(new Tuple<double, double>(maxItem.GetMinX,maxItem.AğırlıkGetir(Enums.AgirlikMerkez.Donus)));
+                    var maxValue = item.Max(b => b.GetMinKesisimX); //Min. Gelen değerin Maximum değer seçimi
+                    var maxItem = item.First(a => a.GetMinKesisimX == maxValue); // Maximum değere sahip nesnenin bulunması
+                    agirlikliDonusOrtTuple.Add(new Tuple<double, double>(maxItem.GetMinKesisimX, maxItem.AğırlıkGetir(Enums.AgirlikMerkez.Donus)));
                 }
             }
 
-            List<Tuple<double, double>> agirlikliDeterjanOrtTuple=new List<Tuple<double, double>>();
+            List<Tuple<double, double>> agirlikliDeterjanOrtTuple = new List<Tuple<double, double>>();
             for (int i = 0; i < 5; i++)
             {
                 Enums.Deterjan deterjan = (Enums.Deterjan)i;
                 var item = kurallar.Where(a => a.DeterjanMiktari == deterjan);
-                if (item.Count()>0)
+                if (item.Count() > 0)
                 {
-                    var maxItem = item.First(a=>a.GetMinX==item.Max(b => b.GetMinX));
-                    agirlikliDeterjanOrtTuple.Add(new Tuple<double, double>(maxItem.GetMinX,maxItem.AğırlıkGetir(Enums.AgirlikMerkez.Deterjan)));
+                    var maxValue = item.Max(b => b.GetMinKesisimX);    //Maximum Seçimi
+                    var maxItem = item.First(a => a.GetMinKesisimX == maxValue);
+                    agirlikliDeterjanOrtTuple.Add(new Tuple<double, double>(maxItem.GetMinKesisimX, maxItem.AğırlıkGetir(Enums.AgirlikMerkez.Deterjan)));
                 }
             }
-            
 
-            List<Tuple<double, double>> agirlikliSureOrtTuple=new List<Tuple<double, double>>();
+
+            List<Tuple<double, double>> agirlikliSureOrtTuple = new List<Tuple<double, double>>();
             for (int i = 0; i < 5; i++)
             {
                 Enums.Sure sure = (Enums.Sure)i;
                 var item = kurallar.Where(a => a.Suresi == sure);
-                if (item.Count()>0)
+                if (item.Count() > 0)
                 {
-                    var maxItem = item.First(a=>a.GetMinX==item.Max(b => b.GetMinX));
-                    agirlikliSureOrtTuple.Add(new Tuple<double, double>(maxItem.GetMinX,maxItem.AğırlıkGetir(Enums.AgirlikMerkez.Sure)));
+                    var maxValue = item.Max(b => b.GetMinKesisimX);
+                    var maxItem = item.First(a => a.GetMinKesisimX == maxValue);
+                    agirlikliSureOrtTuple.Add(new Tuple<double, double>(maxItem.GetMinKesisimX, maxItem.AğırlıkGetir(Enums.AgirlikMerkez.Sure)));
                 }
             }
 
 
-            label15.Text=agirlikliDonusOrtTuple.AgirlikliOrtalamaExt(a => a.Item1, b => b.Item2).ToString();
-            label17.Text=agirlikliSureOrtTuple.AgirlikliOrtalamaExt(a => a.Item1, b => b.Item2).ToString();
-            label18.Text=agirlikliDeterjanOrtTuple.AgirlikliOrtalamaExt(a => a.Item1, b => b.Item2).ToString();
+            label15.Text = agirlikliDonusOrtTuple.AgirlikliOrtalamaExt(a => a.Item1, b => b.Item2).ToString();
+            label17.Text = agirlikliSureOrtTuple.AgirlikliOrtalamaExt(a => a.Item1, b => b.Item2).ToString();
+            label18.Text = agirlikliDeterjanOrtTuple.AgirlikliOrtalamaExt(a => a.Item1, b => b.Item2).ToString();
 
             //Series series = new Series();
             //series.ChartType = SeriesChartType.Area;
@@ -194,23 +235,24 @@ namespace Bulanik_Mantik
             //(e != null) Event tetiklenmesi dışında girilmemesi için
 
             TrackBar activeTrackBar = sender as TrackBar;
-            NumericUpDown activeNumericUpDown=  activeTrackBar.Parent.Controls.OfType<NumericUpDown>().First();
+            NumericUpDown activeNumericUpDown = activeTrackBar.Parent.Controls.OfType<NumericUpDown>().First();
             int indis = int.Parse(Regex.Replace(activeTrackBar.Name, "\\D*", ""));
-            if (e == null) 
-                activeTrackBar.Value = (int) (activeNumericUpDown.Value*1000);
+            if (e == null)
+                activeTrackBar.Value = (int)(activeNumericUpDown.Value * 1000);
             var temp = (double)activeTrackBar.Value / 1000;
             var chart = activeTrackBar.Parent.Controls.OfType<Panel>().First().Controls.OfType<Chart>().First();
-            double X=temp > 0 ? temp : 0.03;
-            if(e!=null) 
+            double X = temp > 0 ? temp : 0.03;
+            if (e != null)
                 activeNumericUpDown.Value = (decimal)X;
             chart.Series[3].Points[0].XValue = X;
-            chart.Series[3].Points[0].Label =(core.KesisimHesapla(temp, (FuzzyLogicCore.KESISIM) (indis - 1)).Min().ToString() + ".000").Substring(0,5);
-
+            chart.Series[3].Points[0].Label = (core.KesisimHesapla(temp, (FuzzyLogicCore.KESISIM)(indis - 1)).Min().ToString() + ".000").Substring(0, 5);
+            if (e != null)
+                button1_Click(null, null);
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            if(!(sender as Control).Focused) return;
+            if (!(sender as Control).Focused) return;
             TrackBar tb = (sender as Control).Parent.Controls.OfType<TrackBar>().First();
             trackBar2_Scroll(tb, null);
         }
@@ -218,6 +260,27 @@ namespace Bulanik_Mantik
         private void Label1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void Button2_Click(object sender, EventArgs e)
+        {
+           Series bar = new Series();
+           bar.ChartType = SeriesChartType.Area;
+           bar.Color = Color.FromArgb(150, 155, 250, 155);
+         //  bar.Points.AddXY()
+
+        }
+
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            foreach (Control control in flowLayoutPanel1.Controls)
+                control.Visible = false;
+        }
+
+        private void Button4_Click(object sender, EventArgs e)
+        {
+            foreach (Control control in flowLayoutPanel1.Controls)
+                control.Visible = true;
         }
     }
 }

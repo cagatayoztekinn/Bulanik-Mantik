@@ -163,11 +163,28 @@ namespace Bulanik_Mantik
             {
                 Enums.Donus donus = (Enums.Donus)i;
                 var item = kurallar.Where(a => a.DonusHizi == donus); //Çıktı Grafiğinin Ara değer grafiklerine karşılık gelen Enumlarını getir
+                Tuple<double, double> maxTupple=null;
                 if (item.Count() > 0)
                 {
                     var maxValue = item.Max(b => b.GetMinKesisimX); //Min. Gelen değerin Maximum değer seçimi
                     var maxItem = item.First(a => a.GetMinKesisimX == maxValue); // Maximum değere sahip nesnenin bulunması
-                    agirlikliDonusOrtTuple.Add(new Tuple<double, double>(maxItem.GetMinKesisimX, maxItem.AğırlıkGetir(Enums.AgirlikMerkez.Donus)));
+                    maxTupple= new Tuple<double, double>(maxItem.GetMinKesisimX,maxItem.AğırlıkGetir(Enums.AgirlikMerkez.Donus));
+                    agirlikliDonusOrtTuple.Add(maxTupple);
+                }
+
+                if (maxTupple!=null)
+                {
+                    Series series = chart4.Series.Any(a=>a.Name=="area"+i)?chart4.Series["area"+i]: new Series("area"+i);
+                    series.ChartType = SeriesChartType.Area;
+                    series.Color = Color.FromArgb(175, 255-(i*51), i*51,255/ (i + 1) );
+                    series.Points.Clear();
+                   
+                    var list= core.AreaHesapla(Enums.AgirlikMerkez.Donus, maxTupple.Item1,i);
+                    foreach (var l in list)
+                        series.Points.AddXY(l.X,l.Y);
+                    
+                    if (!chart4.Series.Contains(series))
+                        chart4.Series.Add(series);
                 }
             }
 
@@ -176,11 +193,28 @@ namespace Bulanik_Mantik
             {
                 Enums.Deterjan deterjan = (Enums.Deterjan)i;
                 var item = kurallar.Where(a => a.DeterjanMiktari == deterjan);
+                Tuple<double, double> maxTupple=null;
                 if (item.Count() > 0)
                 {
                     var maxValue = item.Max(b => b.GetMinKesisimX);    //Maximum Seçimi
                     var maxItem = item.First(a => a.GetMinKesisimX == maxValue);
-                    agirlikliDeterjanOrtTuple.Add(new Tuple<double, double>(maxItem.GetMinKesisimX, maxItem.AğırlıkGetir(Enums.AgirlikMerkez.Deterjan)));
+                    maxTupple= new Tuple<double, double>(maxItem.GetMinKesisimX,maxItem.AğırlıkGetir(Enums.AgirlikMerkez.Deterjan));
+                    agirlikliDeterjanOrtTuple.Add(maxTupple);
+                }
+
+                if (maxTupple!=null)
+                {
+                    Series series = chart5.Series.Any(a=>a.Name=="area"+i)?chart5.Series["area"+i]: new Series("area"+i);
+                    series.ChartType = SeriesChartType.Area;
+                    series.Color = Color.FromArgb(175, 255-(i*51), i*51,255/ (i + 1) );
+                    series.Points.Clear();
+                   
+                    var list= core.AreaHesapla(Enums.AgirlikMerkez.Deterjan, maxTupple.Item1,i);
+                    foreach (var l in list)
+                        series.Points.AddXY(l.X,l.Y);
+                    
+                    if (!chart5.Series.Contains(series))
+                        chart5.Series.Add(series);
                 }
             }
 
@@ -190,29 +224,36 @@ namespace Bulanik_Mantik
             {
                 Enums.Sure sure = (Enums.Sure)i;
                 var item = kurallar.Where(a => a.Suresi == sure);
+                Tuple<double, double> maxTupple=null;
                 if (item.Count() > 0)
                 {
                     var maxValue = item.Max(b => b.GetMinKesisimX);
                     var maxItem = item.First(a => a.GetMinKesisimX == maxValue);
-                    agirlikliSureOrtTuple.Add(new Tuple<double, double>(maxItem.GetMinKesisimX, maxItem.AğırlıkGetir(Enums.AgirlikMerkez.Sure)));
+                    maxTupple= new Tuple<double, double>(maxItem.GetMinKesisimX,maxItem.AğırlıkGetir(Enums.AgirlikMerkez.Sure));
+                    agirlikliSureOrtTuple.Add(maxTupple);
+                }
+
+                if (maxTupple!=null)
+                {
+                    Series series = chart6.Series.Any(a=>a.Name=="area"+i)?chart6.Series["area"+i]: new Series("area"+i);
+                    series.ChartType = SeriesChartType.Area;
+                    series.Color = Color.FromArgb(175, 255-(i*51), i*51,255/ (i + 1) );
+                    series.Points.Clear();
+                   
+                    var list= core.AreaHesapla(Enums.AgirlikMerkez.Sure, maxTupple.Item1,i);
+                    foreach (var l in list)
+                        series.Points.AddXY(l.X,l.Y);
+                    
+                    if (!chart6.Series.Contains(series))
+                        chart6.Series.Add(series);
                 }
             }
 
 
             label15.Text = agirlikliDonusOrtTuple.AgirlikliOrtalamaExt(a => a.Item1, b => b.Item2).ToString();
-            label17.Text = agirlikliSureOrtTuple.AgirlikliOrtalamaExt(a => a.Item1, b => b.Item2).ToString();
             label18.Text = agirlikliDeterjanOrtTuple.AgirlikliOrtalamaExt(a => a.Item1, b => b.Item2).ToString();
-
-            //Series series = new Series();
-            //series.ChartType = SeriesChartType.Area;
-            //series.Points.AddXY(5, 0);
-            //series.Points.AddXY(8, 0.7);
-            //series.Points.AddXY(12, 0.89);
-            //series.Points.AddXY(15, 0);
-            //series.Color = Color.FromArgb(50, 220, 25, 0);
-
-            //trackBar1.Maximum += 50;
-            //chart1.Series.Add(series);
+            label17.Text = agirlikliSureOrtTuple.AgirlikliOrtalamaExt(a => a.Item1, b => b.Item2).ToString();
+          
 
         }
 
@@ -264,11 +305,22 @@ namespace Bulanik_Mantik
 
         private void Button2_Click(object sender, EventArgs e)
         {
-           Series bar = new Series();
-           bar.ChartType = SeriesChartType.Area;
-           bar.Color = Color.FromArgb(150, 155, 250, 155);
-         //  bar.Points.AddXY()
-
+           //Series bar = new Series();
+           //bar.ChartType = SeriesChartType.Area;
+           //bar.Color = Color.FromArgb(150, 155, 250, 155);
+        
+           Series series = chart1.Series.Any(a=>a.Name=="area1")?chart1.Series["area1"]: new Series("area1");
+           series.ChartType = SeriesChartType.Area;
+           series.Color = Color.FromArgb(150, 155, 250, 155);
+           series.Points.Clear();
+           series.Points.AddXY(1,0);
+           series.Points.AddXY(5,1);
+           series.Points.AddXY(6,1);
+           series.Points.AddXY(8,0);
+           if (!chart1.Series.Contains(series))
+           {
+               chart1.Series.Add(series);
+           }
         }
 
         private void Button3_Click(object sender, EventArgs e)

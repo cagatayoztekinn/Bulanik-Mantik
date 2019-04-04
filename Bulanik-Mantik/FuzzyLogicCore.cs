@@ -216,6 +216,273 @@ namespace Bulanik_Mantik
             if (kesisimler.Count == 0) kesisimler.Add(-1);
             return kesisimler;
         }
+
+        public List<PointF> AreaHesapla(Enums.AgirlikMerkez outputMerkez, double x, int areaId)
+        {
+            switch (outputMerkez)
+            {
+                case Enums.AgirlikMerkez.Donus:
+                    return AreaDonusHizi(x, areaId);
+                case Enums.AgirlikMerkez.Deterjan:
+                    return AreaDeterjan(x, areaId);
+                case Enums.AgirlikMerkez.Sure:
+                    return AreaSure(x, areaId);
+            }
+            return new List<PointF>();
+        }
+        private List<PointF> AreaDonusHizi(double x, int areaId)
+        {
+            double[] d1, d2, d3, d4, d5;
+            d1 = new double[] { -5.8, -2.8, 0.5, 1.5 };
+            d2 = new double[] { 0.5, 2.75, 5 };
+            d3 = new double[] { 2.75, 5, 7.25 };
+            d4 = new double[] { 5, 7.25, 9.5 };
+            d5 = new double[] { 8.5, 9.5, 12.8, 15.2 };
+            List<PointF> noktalar = new List<PointF>();
+            double sonuc;
+
+
+            if (areaId == 0)
+            {
+
+                noktalar.Add(new PointF((float)d1[0], 0));
+
+                sonuc = -(x - d1[0]) * (1 / Math.Abs(d1[0] - d1[1]));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                sonuc = 1 - (x - d1[2]) * (1 / Math.Abs(d1[2] - d1[3]));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                noktalar.Add(new PointF((float)d1[3], 0));
+            }
+
+            if (areaId == 1)
+            {
+
+                noktalar.Add(new PointF((float)d2[0], 0));
+
+                sonuc = d2[0] + (x * (Math.Abs(d2[0] - d2[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                sonuc = d2[2] - (x * (Math.Abs(d2[1] - d2[2])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                noktalar.Add(new PointF((float)d2[2], 0));
+            }
+
+            if (areaId == 2)
+            {
+
+                noktalar.Add(new PointF((float)d3[0], 0));
+
+                sonuc = d3[0] + (x * (Math.Abs(d3[0] - d3[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                sonuc = d3[2] - (x * (Math.Abs(d3[1] - d3[2])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                noktalar.Add(new PointF((float)d3[2], 0));
+            }
+            if (areaId == 3)
+            {
+
+                noktalar.Add(new PointF((float)d4[0], 0));
+
+                sonuc = d4[0] + (x * (Math.Abs(d4[0] - d4[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                sonuc = d4[2] - (x * (Math.Abs(d4[1] - d4[2])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                noktalar.Add(new PointF((float)d4[2], 0));
+            }
+
+            if (areaId == 4)
+            {
+
+                noktalar.Add(new PointF((float)d5[0], 0));
+
+                sonuc = d5[0] + (x * (Math.Abs(d5[0] - d5[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                sonuc = d5[3] - (x * (Math.Abs(d5[2] - d5[3])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                noktalar.Add(new PointF((float)d5[3], 0));
+            }
+
+            return noktalar;
+        }
+        private List<PointF> AreaDeterjan(double x, int areaId)
+        {
+            double[] d1, d2, d3, d4, d5;
+            d1 = new double[] { 0, 0, 20, 85 };
+            d2 = new double[] { 20, 85, 150 };
+            d3 = new double[] { 85, 150, 215 };
+            d4 = new double[] { 150, 215, 280};
+            d5 = new double[] { 215, 280, 300, 300 };
+            List<PointF> noktalar = new List<PointF>();
+            double sonuc;
+
+
+            if (areaId == 0)
+            {
+
+                noktalar.Add(new PointF((float)d1[0], 0));
+
+                sonuc = -(x - d1[0]) * (1 / Math.Abs(d1[0] - d1[1]));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                sonuc = 1 - (x - d1[2]) * (1 / Math.Abs(d1[2] - d1[3]));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                noktalar.Add(new PointF((float)d1[3], 0));
+            }
+
+            if (areaId == 1)
+            {
+
+                noktalar.Add(new PointF((float)d2[0], 0));
+
+                sonuc = d2[0] + (x * (Math.Abs(d2[0] - d2[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                sonuc = d2[2] - (x * (Math.Abs(d2[1] - d2[2])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                noktalar.Add(new PointF((float)d2[2], 0));
+            }
+
+            if (areaId == 2)
+            {
+
+                noktalar.Add(new PointF((float)d3[0], 0));
+
+                sonuc = d3[0] + (x * (Math.Abs(d3[0] - d3[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                sonuc = d3[2] - (x * (Math.Abs(d3[1] - d3[2])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                noktalar.Add(new PointF((float)d3[2], 0));
+            }
+            if (areaId == 3)
+            {
+
+                noktalar.Add(new PointF((float)d4[0], 0));
+
+                sonuc = d4[0] + (x * (Math.Abs(d4[0] - d4[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                sonuc = d4[2] - (x * (Math.Abs(d4[1] - d4[2])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                noktalar.Add(new PointF((float)d4[2], 0));
+            }
+
+            if (areaId == 4)
+            {
+
+                noktalar.Add(new PointF((float)d5[0], 0));
+
+                sonuc = d5[0] + (x * (Math.Abs(d5[0] - d5[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                sonuc = d5[3] - (x * (Math.Abs(d5[2] - d5[3])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                noktalar.Add(new PointF((float)d5[3], 0));
+            }
+
+            return noktalar;
+        }
+        private List<PointF> AreaSure(double x, int areaId)
+        {
+            double[] d1, d2, d3, d4, d5;
+            d1 = new double[] { -46.5, -25.28, 22.3, 39.9};
+            d2 = new double[] {22.3, 39.9, 57.5};
+            d3 = new double[] {39.9, 57.5, 75.1 };
+            d4 = new double[] {57.5, 75.1, 92.7 };
+            d5 = new double[] { 75, 92.7, 111.6, 130 };
+            List<PointF> noktalar = new List<PointF>();
+            double sonuc;
+
+
+            if (areaId == 0)
+            {
+
+                noktalar.Add(new PointF((float)d1[0], 0));
+
+                sonuc = -(x - d1[0]) * (1 / Math.Abs(d1[0] - d1[1]));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                sonuc = 1 - (x - d1[2]) * (1 / Math.Abs(d1[2] - d1[3]));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                noktalar.Add(new PointF((float)d1[3], 0));
+            }
+
+            if (areaId == 1)
+            {
+
+                noktalar.Add(new PointF((float)d2[0], 0));
+
+                sonuc = d2[0] + (x * (Math.Abs(d2[0] - d2[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                sonuc = d2[2] - (x * (Math.Abs(d2[1] - d2[2])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                noktalar.Add(new PointF((float)d2[2], 0));
+            }
+
+            if (areaId == 2)
+            {
+
+                noktalar.Add(new PointF((float)d3[0], 0));
+
+                sonuc = d3[0] + (x * (Math.Abs(d3[0] - d3[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                sonuc = d3[2] - (x * (Math.Abs(d3[1] - d3[2])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                noktalar.Add(new PointF((float)d3[2], 0));
+            }
+            if (areaId == 3)
+            {
+
+                noktalar.Add(new PointF((float)d4[0], 0));
+
+                sonuc = d4[0] + (x * (Math.Abs(d4[0] - d4[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                sonuc = d4[2] - (x * (Math.Abs(d4[1] - d4[2])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                noktalar.Add(new PointF((float)d4[2], 0));
+            }
+
+            if (areaId == 4)
+            {
+
+                noktalar.Add(new PointF((float)d5[0], 0));
+
+                sonuc = d5[0] + (x * (Math.Abs(d5[0] - d5[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                sonuc = d5[3] - (x * (Math.Abs(d5[2] - d5[3])));
+                noktalar.Add(new PointF((float)sonuc, (float)x));
+
+                noktalar.Add(new PointF((float)d5[3], 0));
+            }
+
+            return noktalar;
+        }
+
+
+
+
         private List<double> KirlilikKesisim(double d, int sekilIndex)
         {
             // [-4.5, -2.5, 2, 4.5] - [3, 5, 7] - [5.5, 8, 12.5, 15]
@@ -280,7 +547,7 @@ namespace Bulanik_Mantik
                 return weightedValueSum / weightSum;
             else
                 return 0;
-                //throw new DivideByZeroException("Your message here");
+            //throw new DivideByZeroException("Your message here");
         }
     }
     public class Kural
@@ -303,7 +570,7 @@ namespace Bulanik_Mantik
             get
             {
                 //Minimum Seçimi
-                return GetKesisimX.Where(a=>a!=-1).Min();
+                return GetKesisimX.Where(a => a != -1).Min();
             }
         }
         public double[] GetKesisimX

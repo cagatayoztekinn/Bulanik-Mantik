@@ -8,6 +8,74 @@ using System.Threading.Tasks;
 namespace Bulanik_Mantik
 {
 
+    public static class Enums
+    {
+        #region Enumlar
+        public enum InputType
+        {
+            Hassas,
+            Miktr,
+            Kirli
+        }
+
+        public enum AgirlikMerkez
+        {
+            Donus,
+            Deterjan,
+            Sure
+        }
+
+        public enum Hassas
+        {
+            hassas,
+            orta,
+            sağlam
+        }
+
+        public enum Miktr
+        {
+            büyük,
+            orta,
+            küçük
+        }
+
+        public enum Kirli
+        {
+            büyük,
+            orta,
+            küçük
+        }
+
+
+        public enum Donus
+        {
+            hassas,
+            normalHassas,
+            orta,
+            normalGuclu,
+            guclu
+        }
+
+        public enum Deterjan
+        {
+            cokAz,
+            az,
+            orta,
+            fazla,
+            cokFazla
+        }
+
+        public enum Sure
+        {
+            kısa,
+            normalKısa,
+            orta,
+            normalUzun,
+            uzun
+        }
+
+        #endregion
+    }
     public class FuzzyLogicCore
     {
         public enum KESISIM
@@ -70,23 +138,21 @@ namespace Bulanik_Mantik
         }
 
 
-        public List<double> KesisimHesapla(double d, KESISIM k)
+        public List<double> KesisimHesapla(double d, KESISIM k, int sekilIndex = -1)
         {
+
             switch (k)
             {
                 case KESISIM.HASSASLIK:
-                    return HassaslikVeMiktarKesisim(d, k);
-                    break;
+                    return HassaslikVeMiktarKesisim(d, k, sekilIndex);
                 case KESISIM.MIKTAR:
-                    return HassaslikVeMiktarKesisim(d, k);
-                    break;
+                    return HassaslikVeMiktarKesisim(d, k, sekilIndex);
                 case KESISIM.KIRLILIK:
-                    return KirlilikKesisim(d);
-                    break;
+                    return KirlilikKesisim(d, sekilIndex);
             }
             return null;
         }
-        private List<double> HassaslikVeMiktarKesisim(double d, KESISIM k)
+        private List<double> HassaslikVeMiktarKesisim(double d, KESISIM k, int sekilIndex)
         {
             // [-4, -1.5, 2, 4] - [3, 5, 7] - [5.5, 8, 12.5, 14]
 
@@ -104,10 +170,13 @@ namespace Bulanik_Mantik
             else if (d >= 2 && d <= 4)
                 d1 = 1 - (d - 2) * (1 / Math.Abs((2.0) - (4)));
 
+
+
             if (d >= 3 && d <= 5)
                 d2 = (d - 3) * (1 / Math.Abs((3.0) - (5.0)));
             else if (d >= 5 && d <= 7)
                 d2 = 1 - (d - 5) * (1 / Math.Abs((5.0) - (7.0)));
+
 
 
             if (d >= 5.5 && d <= 8)
@@ -117,22 +186,26 @@ namespace Bulanik_Mantik
             else if (d >= 12.5 && d <= 14)
                 d3 = 1 - ((d - 12.5) * (1 / Math.Abs((12.5) - (14.0))));
 
+
             if (d1 > -1)
             {
                 tempList.Add(k == KESISIM.HASSASLIK ? "Sağlam" : "Küçük");
-                kesisimler.Add(d1);
+                if (sekilIndex == -1 || sekilIndex == 0)
+                    kesisimler.Add(d1);
             }
 
             if (d2 > -1)
             {
                 tempList.Add("Orta");
-                kesisimler.Add(d2);
+                if (sekilIndex == -1 || sekilIndex == 1)
+                    kesisimler.Add(d2);
             }
 
             if (d3 > -1)
             {
                 tempList.Add(k == KESISIM.HASSASLIK ? "Hassas" : "Büyük");
-                kesisimler.Add(d3);
+                if (sekilIndex == -1 || sekilIndex == 2)
+                    kesisimler.Add(d3);
             }
 
             if (k == KESISIM.HASSASLIK)
@@ -140,10 +213,10 @@ namespace Bulanik_Mantik
             else
                 _miktarList = tempList;
 
-            if (kesisimler.Count == 0) kesisimler.Add(0);
+            if (kesisimler.Count == 0) kesisimler.Add(-1);
             return kesisimler;
         }
-        private List<double> KirlilikKesisim(double d)
+        private List<double> KirlilikKesisim(double d, int sekilIndex)
         {
             // [-4.5, -2.5, 2, 4.5] - [3, 5, 7] - [5.5, 8, 12.5, 15]
             _kirlilikList = new List<string>();
@@ -173,19 +246,22 @@ namespace Bulanik_Mantik
             if (d1 > -1)
             {
                 _kirlilikList.Add("Küçük");
-                kesisimler.Add(d1);
+                if (sekilIndex == -1 || sekilIndex == 0)
+                    kesisimler.Add(d1);
             }
             if (d2 > -1)
             {
                 _kirlilikList.Add("Orta");
-                kesisimler.Add(d2);
+                if (sekilIndex == -1 || sekilIndex == 1)
+                    kesisimler.Add(d2);
             }
             if (d3 > -1)
             {
                 _kirlilikList.Add("Büyük");
-                kesisimler.Add(d3);
+                if (sekilIndex == -1 || sekilIndex == 2)
+                    kesisimler.Add(d3);
             }
-            if (kesisimler.Count == 0) kesisimler.Add(0);
+            if (kesisimler.Count == 0) kesisimler.Add(-1);
             return kesisimler;
         }
 
@@ -209,92 +285,45 @@ namespace Bulanik_Mantik
     public class Kural
     {
 
-        #region Enumlar
+        public Enums.Hassas Hassaslık { get; set; }
+        public Enums.Miktr Miktar { get; set; }
+        public Enums.Kirli Kirlilik { get; set; }
 
-        public enum StringType
-        {
-            Hassas,
-            Miktr,
-            Kirli
-        }
-        public enum AgirlikMerkez
-        {
-            Donus,
-            Deterjan,
-            Sure
-        }
-        public enum Hassas
-        {
-            hassas,
-            orta,
-            sağlam
-        }
-        public enum Miktr
-        {
-            büyük,
-            orta,
-            küçük
-        }
-        public enum Kirli
-        {
-            büyük,
-            orta,
-            küçük
-        }
-
-
-
-        public enum Donus
-        {
-            hassas,
-            normalHassas,
-            orta,
-            normalGuclu,
-            guclu
-        }
-        public enum Deterjan
-        {
-            cokAz,
-            az,
-            orta,
-            fazla,
-            cokFazla
-        }
-        public enum Sure
-        {
-            kısa,
-            normalKısa,
-            orta,
-            normalUzun,
-            uzun
-        }
-
-        #endregion
-
-        public Hassas Hassaslık { get; set; }
-        public Miktr Miktar { get; set; }
-        public Kirli Kirlilik { get; set; }
-
-        public Donus DonusHizi { get; set; }
-        public Deterjan DeterjanMiktari { get; set; }
-        public Sure Suresi { get; set; }
+        public Enums.Donus DonusHizi { get; set; }
+        public Enums.Deterjan DeterjanMiktari { get; set; }
+        public Enums.Sure Suresi { get; set; }
         public double x1 { get; set; }
         public double x2 { get; set; }
         public double x3 { get; set; }
 
+        FuzzyLogicCore core = new FuzzyLogicCore();
+        //public double GetMinX
+        //{
+        //    get
+        //    {
+
+        //        List<double> list = new List<double>();
+
+        //        list.Add(x1);
+        //        list.Add(x2);
+        //        list.Add(x3);
+        //        return list.Min();
+        //    }
+
+        //}
         public double GetMinX
         {
             get
             {
                 List<double> list = new List<double>();
-                list.Add(x1);
-                list.Add(x2);
-                list.Add(x3);
-                return list.Min();
+                list.Add(core.KesisimHesapla(x1, FuzzyLogicCore.KESISIM.HASSASLIK, (int)Hassaslık).Single());
+                list.Add(core.KesisimHesapla(x2, FuzzyLogicCore.KESISIM.MIKTAR, (int)Miktar).Single());
+                list.Add(core.KesisimHesapla(x3, FuzzyLogicCore.KESISIM.KIRLILIK, (int)Kirlilik).Single());
+                return list.Where(a=>a!=-1).Min();
             }
         }
 
-        public Kural(Hassas Hassaslık, Miktr Miktar, Kirli kirlilik)
+        public Kural(Enums.Hassas Hassaslık, Enums.Miktr Miktar, Enums.Kirli kirlilik)
         {
             this.Hassaslık = Hassaslık;
             this.Miktar = Miktar;
@@ -306,45 +335,45 @@ namespace Bulanik_Mantik
 
         public Kural(string Hassaslık, string Miktar, string kirlilik)
         {
-            Hassas h = default;
-            Miktr m = default;
-            Kirli k = default;
+            Enums.Hassas h = default;
+            Enums.Miktr m = default;
+            Enums.Kirli k = default;
             switch (Hassaslık)
             {
                 case "Sağlam":
-                    h = Hassas.sağlam;
+                    h = Enums.Hassas.sağlam;
                     break;
                 case "Orta":
-                    h = Hassas.orta;
+                    h = Enums.Hassas.orta;
                     break;
                 case "Hassas":
-                    h = Hassas.hassas;
+                    h = Enums.Hassas.hassas;
                     break;
             }
 
             switch (Miktar)
             {
                 case "Küçük":
-                    m = Miktr.küçük;
+                    m = Enums.Miktr.küçük;
                     break;
                 case "Orta":
-                    m = Miktr.orta;
+                    m = Enums.Miktr.orta;
                     break;
                 case "Büyük":
-                    m = Miktr.büyük;
+                    m = Enums.Miktr.büyük;
                     break;
             }
 
             switch (kirlilik)
             {
                 case "Küçük":
-                    k = Kirli.küçük;
+                    k = Enums.Kirli.küçük;
                     break;
                 case "Orta":
-                    k = Kirli.orta;
+                    k = Enums.Kirli.orta;
                     break;
                 case "Büyük":
-                    k = Kirli.büyük;
+                    k = Enums.Kirli.büyük;
                     break;
             }
 
@@ -355,43 +384,43 @@ namespace Bulanik_Mantik
 
         }
 
-        public  double AğırlıkGetir(AgirlikMerkez m)
+        public double AğırlıkGetir(Enums.AgirlikMerkez m)
         {
             double donme_agirlik = 0, sure_agirlik = 0, deterjan_agirlik = 0;
             switch (DonusHizi)
             {
-                case Donus.hassas:
+                case Enums.Donus.hassas:
                     donme_agirlik = -1.15;
                     break;
-                case Donus.normalHassas:
+                case Enums.Donus.normalHassas:
                     donme_agirlik = 2.75;
                     break;
-                case Donus.orta:
+                case Enums.Donus.orta:
                     donme_agirlik = 5;
                     break;
-                case Donus.normalGuclu:
+                case Enums.Donus.normalGuclu:
                     donme_agirlik = 7.25;
                     break;
-                case Donus.guclu:
+                case Enums.Donus.guclu:
                     donme_agirlik = 11.15;
                     break;
             }
 
             switch (Suresi)
             {
-                case Sure.kısa:
+                case Enums.Sure.kısa:
                     sure_agirlik = -1.49;
                     break;
-                case Sure.normalKısa:
+                case Enums.Sure.normalKısa:
                     sure_agirlik = 39.9;
                     break;
-                case Sure.orta:
+                case Enums.Sure.orta:
                     sure_agirlik = 57.5;
                     break;
-                case Sure.normalUzun:
+                case Enums.Sure.normalUzun:
                     sure_agirlik = 75.1;
                     break;
-                case Sure.uzun:
+                case Enums.Sure.uzun:
                     sure_agirlik = 102.15;
                     break;
             }
@@ -399,28 +428,28 @@ namespace Bulanik_Mantik
 
             switch (DeterjanMiktari)
             {
-                case Deterjan.cokAz:
+                case Enums.Deterjan.cokAz:
                     deterjan_agirlik = 10;
                     break;
-                case Deterjan.az:
+                case Enums.Deterjan.az:
                     deterjan_agirlik = 85;
                     break;
-                case Deterjan.orta:
+                case Enums.Deterjan.orta:
                     deterjan_agirlik = 150;
                     break;
-                case Deterjan.fazla:
+                case Enums.Deterjan.fazla:
                     deterjan_agirlik = 215;
                     break;
-                case Deterjan.cokFazla:
+                case Enums.Deterjan.cokFazla:
                     deterjan_agirlik = 290;
                     break;
             }
 
             switch (m)
             {
-                case AgirlikMerkez.Donus: return donme_agirlik;
-                case AgirlikMerkez.Deterjan: return deterjan_agirlik;
-                case AgirlikMerkez.Sure: return sure_agirlik;
+                case Enums.AgirlikMerkez.Donus: return donme_agirlik;
+                case Enums.AgirlikMerkez.Deterjan: return deterjan_agirlik;
+                case Enums.AgirlikMerkez.Sure: return sure_agirlik;
             }
             return 0;
         }
@@ -432,32 +461,32 @@ namespace Bulanik_Mantik
             this.x2 = x2;
             this.x3 = x3;
         }
-        public string ToString(StringType type)
+        public string ToString(Enums.InputType type)
         {
             switch (type)
             {
-                case StringType.Hassas:
+                case Enums.InputType.Hassas:
                     switch (Hassaslık)
                     {
-                        case Hassas.sağlam: return "Sağlam";
-                        case Hassas.orta: return "Orta";
-                        case Hassas.hassas: return "Hassas";
+                        case Enums.Hassas.sağlam: return "Sağlam";
+                        case Enums.Hassas.orta: return "Orta";
+                        case Enums.Hassas.hassas: return "Hassas";
                     }
                     break;
-                case StringType.Miktr:
+                case Enums.InputType.Miktr:
                     switch (Miktar)
                     {
-                        case Miktr.küçük: return "Küçük";
-                        case Miktr.orta: return "Orta";
-                        case Miktr.büyük: return "Büyük";
+                        case Enums.Miktr.küçük: return "Küçük";
+                        case Enums.Miktr.orta: return "Orta";
+                        case Enums.Miktr.büyük: return "Büyük";
                     }
                     break;
-                case StringType.Kirli:
+                case Enums.InputType.Kirli:
                     switch (Kirlilik)
                     {
-                        case Kirli.küçük: return "Küçük";
-                        case Kirli.orta: return "Orta";
-                        case Kirli.büyük: return "Büyük";
+                        case Enums.Kirli.küçük: return "Küçük";
+                        case Enums.Kirli.orta: return "Orta";
+                        case Enums.Kirli.büyük: return "Büyük";
                     }
                     break;
             }
@@ -466,185 +495,185 @@ namespace Bulanik_Mantik
         public void Kurallar()
         {
 
-            if (Hassaslık == Hassas.hassas && Miktar == Miktr.küçük && Kirlilik == Kirli.küçük)
+            if (Hassaslık == Enums.Hassas.hassas && Miktar == Enums.Miktr.küçük && Kirlilik == Enums.Kirli.küçük)
             {
-                DonusHizi = Donus.hassas;
-                Suresi = Sure.kısa;
-                DeterjanMiktari = Deterjan.cokAz;
+                DonusHizi = Enums.Donus.hassas;
+                Suresi = Enums.Sure.kısa;
+                DeterjanMiktari = Enums.Deterjan.cokAz;
             }
-            if (Hassaslık == Hassas.hassas && Miktar == Miktr.küçük && Kirlilik == Kirli.orta)
+            if (Hassaslık == Enums.Hassas.hassas && Miktar == Enums.Miktr.küçük && Kirlilik == Enums.Kirli.orta)
             {
-                DonusHizi = Donus.normalHassas;
-                Suresi = Sure.kısa;
-                DeterjanMiktari = Deterjan.az;
+                DonusHizi = Enums.Donus.normalHassas;
+                Suresi = Enums.Sure.kısa;
+                DeterjanMiktari = Enums.Deterjan.az;
             }
-            if (Hassaslık == Hassas.hassas && Miktar == Miktr.küçük && Kirlilik == Kirli.büyük)
+            if (Hassaslık == Enums.Hassas.hassas && Miktar == Enums.Miktr.küçük && Kirlilik == Enums.Kirli.büyük)
             {
-                DonusHizi = Donus.orta;
-                Suresi = Sure.normalKısa;
-                DeterjanMiktari = Deterjan.orta;
-            }
-
-
-            if (Hassaslık == Hassas.hassas && Miktar == Miktr.orta && Kirlilik == Kirli.küçük)
-            {
-                DonusHizi = Donus.hassas;
-                Suresi = Sure.kısa;
-                DeterjanMiktari = Deterjan.orta;
-            }
-            if (Hassaslık == Hassas.hassas && Miktar == Miktr.orta && Kirlilik == Kirli.orta)
-            {
-                DonusHizi = Donus.normalHassas;
-                Suresi = Sure.normalKısa;
-                DeterjanMiktari = Deterjan.orta;
-            }
-            if (Hassaslık == Hassas.hassas && Miktar == Miktr.orta && Kirlilik == Kirli.büyük)
-            {
-                DonusHizi = Donus.orta;
-                Suresi = Sure.orta;
-                DeterjanMiktari = Deterjan.fazla;
+                DonusHizi = Enums.Donus.orta;
+                Suresi = Enums.Sure.normalKısa;
+                DeterjanMiktari = Enums.Deterjan.orta;
             }
 
 
-            if (Hassaslık == Hassas.hassas && Miktar == Miktr.büyük && Kirlilik == Kirli.küçük)
+            if (Hassaslık == Enums.Hassas.hassas && Miktar == Enums.Miktr.orta && Kirlilik == Enums.Kirli.küçük)
             {
-                DonusHizi = Donus.normalHassas;
-                Suresi = Sure.normalKısa;
-                DeterjanMiktari = Deterjan.orta;
+                DonusHizi = Enums.Donus.hassas;
+                Suresi = Enums.Sure.kısa;
+                DeterjanMiktari = Enums.Deterjan.orta;
             }
-            if (Hassaslık == Hassas.hassas && Miktar == Miktr.büyük && Kirlilik == Kirli.orta)
+            if (Hassaslık == Enums.Hassas.hassas && Miktar == Enums.Miktr.orta && Kirlilik == Enums.Kirli.orta)
             {
-                DonusHizi = Donus.normalHassas;
-                Suresi = Sure.orta;
-                DeterjanMiktari = Deterjan.fazla;
+                DonusHizi = Enums.Donus.normalHassas;
+                Suresi = Enums.Sure.normalKısa;
+                DeterjanMiktari = Enums.Deterjan.orta;
             }
-            if (Hassaslık == Hassas.hassas && Miktar == Miktr.büyük && Kirlilik == Kirli.büyük)
+            if (Hassaslık == Enums.Hassas.hassas && Miktar == Enums.Miktr.orta && Kirlilik == Enums.Kirli.büyük)
             {
-                DonusHizi = Donus.orta;
-                Suresi = Sure.normalUzun;
-                DeterjanMiktari = Deterjan.fazla;
-            }
-
-
-            if (Hassaslık == Hassas.orta && Miktar == Miktr.küçük && Kirlilik == Kirli.küçük)
-            {
-                DonusHizi = Donus.normalHassas;
-                Suresi = Sure.normalKısa;
-                DeterjanMiktari = Deterjan.az;
-            }
-            if (Hassaslık == Hassas.orta && Miktar == Miktr.küçük && Kirlilik == Kirli.orta)
-            {
-                DonusHizi = Donus.orta;
-                Suresi = Sure.kısa;
-                DeterjanMiktari = Deterjan.orta;
-            }
-            if (Hassaslık == Hassas.orta && Miktar == Miktr.küçük && Kirlilik == Kirli.büyük)
-            {
-                DonusHizi = Donus.normalGuclu;
-                Suresi = Sure.orta;
-                DeterjanMiktari = Deterjan.fazla;
+                DonusHizi = Enums.Donus.orta;
+                Suresi = Enums.Sure.orta;
+                DeterjanMiktari = Enums.Deterjan.fazla;
             }
 
 
+            if (Hassaslık == Enums.Hassas.hassas && Miktar == Enums.Miktr.büyük && Kirlilik == Enums.Kirli.küçük)
+            {
+                DonusHizi = Enums.Donus.normalHassas;
+                Suresi = Enums.Sure.normalKısa;
+                DeterjanMiktari = Enums.Deterjan.orta;
+            }
+            if (Hassaslık == Enums.Hassas.hassas && Miktar == Enums.Miktr.büyük && Kirlilik == Enums.Kirli.orta)
+            {
+                DonusHizi = Enums.Donus.normalHassas;
+                Suresi = Enums.Sure.orta;
+                DeterjanMiktari = Enums.Deterjan.fazla;
+            }
+            if (Hassaslık == Enums.Hassas.hassas && Miktar == Enums.Miktr.büyük && Kirlilik == Enums.Kirli.büyük)
+            {
+                DonusHizi = Enums.Donus.orta;
+                Suresi = Enums.Sure.normalUzun;
+                DeterjanMiktari = Enums.Deterjan.fazla;
+            }
 
-            if (Hassaslık == Hassas.orta && Miktar == Miktr.orta && Kirlilik == Kirli.küçük)
-            {
-                DonusHizi = Donus.normalHassas;
-                Suresi = Sure.normalKısa;
-                DeterjanMiktari = Deterjan.orta;
-            }
-            if (Hassaslık == Hassas.orta && Miktar == Miktr.orta && Kirlilik == Kirli.orta)
-            {
-                DonusHizi = Donus.orta;
-                Suresi = Sure.orta;
-                DeterjanMiktari = Deterjan.orta;
-            }
-            if (Hassaslık == Hassas.orta && Miktar == Miktr.orta && Kirlilik == Kirli.büyük)
-            {
-                DonusHizi = Donus.hassas;
-                Suresi = Sure.uzun;
-                DeterjanMiktari = Deterjan.fazla;
-            }
 
-
-            if (Hassaslık == Hassas.orta && Miktar == Miktr.büyük && Kirlilik == Kirli.küçük)
+            if (Hassaslık == Enums.Hassas.orta && Miktar == Enums.Miktr.küçük && Kirlilik == Enums.Kirli.küçük)
             {
-                DonusHizi = Donus.hassas;
-                Suresi = Sure.orta;
-                DeterjanMiktari = Deterjan.orta;
+                DonusHizi = Enums.Donus.normalHassas;
+                Suresi = Enums.Sure.normalKısa;
+                DeterjanMiktari = Enums.Deterjan.az;
             }
-            if (Hassaslık == Hassas.orta && Miktar == Miktr.büyük && Kirlilik == Kirli.orta)
+            if (Hassaslık == Enums.Hassas.orta && Miktar == Enums.Miktr.küçük && Kirlilik == Enums.Kirli.orta)
             {
-                DonusHizi = Donus.hassas;
-                Suresi = Sure.normalUzun;
-                DeterjanMiktari = Deterjan.fazla;
+                DonusHizi = Enums.Donus.orta;
+                Suresi = Enums.Sure.kısa;
+                DeterjanMiktari = Enums.Deterjan.orta;
             }
-            if (Hassaslık == Hassas.orta && Miktar == Miktr.büyük && Kirlilik == Kirli.büyük)
+            if (Hassaslık == Enums.Hassas.orta && Miktar == Enums.Miktr.küçük && Kirlilik == Enums.Kirli.büyük)
             {
-                DonusHizi = Donus.hassas;
-                Suresi = Sure.uzun;
-                DeterjanMiktari = Deterjan.cokFazla;
+                DonusHizi = Enums.Donus.normalGuclu;
+                Suresi = Enums.Sure.orta;
+                DeterjanMiktari = Enums.Deterjan.fazla;
             }
 
 
 
-            if (Hassaslık == Hassas.sağlam && Miktar == Miktr.küçük && Kirlilik == Kirli.küçük)
+            if (Hassaslık == Enums.Hassas.orta && Miktar == Enums.Miktr.orta && Kirlilik == Enums.Kirli.küçük)
             {
-                DonusHizi = Donus.orta;
-                Suresi = Sure.orta;
-                DeterjanMiktari = Deterjan.az;
+                DonusHizi = Enums.Donus.normalHassas;
+                Suresi = Enums.Sure.normalKısa;
+                DeterjanMiktari = Enums.Deterjan.orta;
             }
-            if (Hassaslık == Hassas.sağlam && Miktar == Miktr.küçük && Kirlilik == Kirli.orta)
+            if (Hassaslık == Enums.Hassas.orta && Miktar == Enums.Miktr.orta && Kirlilik == Enums.Kirli.orta)
             {
-                DonusHizi = Donus.normalGuclu;
-                Suresi = Sure.orta;
-                DeterjanMiktari = Deterjan.orta;
+                DonusHizi = Enums.Donus.orta;
+                Suresi = Enums.Sure.orta;
+                DeterjanMiktari = Enums.Deterjan.orta;
             }
-            if (Hassaslık == Hassas.sağlam && Miktar == Miktr.küçük && Kirlilik == Kirli.büyük)
+            if (Hassaslık == Enums.Hassas.orta && Miktar == Enums.Miktr.orta && Kirlilik == Enums.Kirli.büyük)
             {
-                DonusHizi = Donus.guclu;
-                Suresi = Sure.normalUzun;
-                DeterjanMiktari = Deterjan.fazla;
-            }
-
-
-            if (Hassaslık == Hassas.sağlam && Miktar == Miktr.orta && Kirlilik == Kirli.küçük)
-            {
-                DonusHizi = Donus.orta;
-                Suresi = Sure.orta;
-                DeterjanMiktari = Deterjan.orta;
-            }
-            if (Hassaslık == Hassas.sağlam && Miktar == Miktr.orta && Kirlilik == Kirli.orta)
-            {
-                DonusHizi = Donus.normalGuclu;
-                Suresi = Sure.normalUzun;
-                DeterjanMiktari = Deterjan.orta;
-            }
-            if (Hassaslık == Hassas.sağlam && Miktar == Miktr.orta && Kirlilik == Kirli.büyük)
-            {
-                DonusHizi = Donus.guclu;
-                Suresi = Sure.orta;
-                DeterjanMiktari = Deterjan.cokFazla;
+                DonusHizi = Enums.Donus.hassas;
+                Suresi = Enums.Sure.uzun;
+                DeterjanMiktari = Enums.Deterjan.fazla;
             }
 
 
-            if (Hassaslık == Hassas.sağlam && Miktar == Miktr.büyük && Kirlilik == Kirli.küçük)
+            if (Hassaslık == Enums.Hassas.orta && Miktar == Enums.Miktr.büyük && Kirlilik == Enums.Kirli.küçük)
             {
-                DonusHizi = Donus.normalGuclu;
-                Suresi = Sure.normalUzun;
-                DeterjanMiktari = Deterjan.fazla;
+                DonusHizi = Enums.Donus.hassas;
+                Suresi = Enums.Sure.orta;
+                DeterjanMiktari = Enums.Deterjan.orta;
             }
-            if (Hassaslık == Hassas.sağlam && Miktar == Miktr.büyük && Kirlilik == Kirli.orta)
+            if (Hassaslık == Enums.Hassas.orta && Miktar == Enums.Miktr.büyük && Kirlilik == Enums.Kirli.orta)
             {
-                DonusHizi = Donus.normalGuclu;
-                Suresi = Sure.uzun;
-                DeterjanMiktari = Deterjan.fazla;
+                DonusHizi = Enums.Donus.hassas;
+                Suresi = Enums.Sure.normalUzun;
+                DeterjanMiktari = Enums.Deterjan.fazla;
             }
-            if (Hassaslık == Hassas.sağlam && Miktar == Miktr.büyük && Kirlilik == Kirli.büyük)
+            if (Hassaslık == Enums.Hassas.orta && Miktar == Enums.Miktr.büyük && Kirlilik == Enums.Kirli.büyük)
             {
-                DonusHizi = Donus.guclu;
-                Suresi = Sure.uzun;
-                DeterjanMiktari = Deterjan.cokFazla;
+                DonusHizi = Enums.Donus.hassas;
+                Suresi = Enums.Sure.uzun;
+                DeterjanMiktari = Enums.Deterjan.cokFazla;
+            }
+
+
+
+            if (Hassaslık == Enums.Hassas.sağlam && Miktar == Enums.Miktr.küçük && Kirlilik == Enums.Kirli.küçük)
+            {
+                DonusHizi = Enums.Donus.orta;
+                Suresi = Enums.Sure.orta;
+                DeterjanMiktari = Enums.Deterjan.az;
+            }
+            if (Hassaslık == Enums.Hassas.sağlam && Miktar == Enums.Miktr.küçük && Kirlilik == Enums.Kirli.orta)
+            {
+                DonusHizi = Enums.Donus.normalGuclu;
+                Suresi = Enums.Sure.orta;
+                DeterjanMiktari = Enums.Deterjan.orta;
+            }
+            if (Hassaslık == Enums.Hassas.sağlam && Miktar == Enums.Miktr.küçük && Kirlilik == Enums.Kirli.büyük)
+            {
+                DonusHizi = Enums.Donus.guclu;
+                Suresi = Enums.Sure.normalUzun;
+                DeterjanMiktari = Enums.Deterjan.fazla;
+            }
+
+
+            if (Hassaslık == Enums.Hassas.sağlam && Miktar == Enums.Miktr.orta && Kirlilik == Enums.Kirli.küçük)
+            {
+                DonusHizi = Enums.Donus.orta;
+                Suresi = Enums.Sure.orta;
+                DeterjanMiktari = Enums.Deterjan.orta;
+            }
+            if (Hassaslık == Enums.Hassas.sağlam && Miktar == Enums.Miktr.orta && Kirlilik == Enums.Kirli.orta)
+            {
+                DonusHizi = Enums.Donus.normalGuclu;
+                Suresi = Enums.Sure.normalUzun;
+                DeterjanMiktari = Enums.Deterjan.orta;
+            }
+            if (Hassaslık == Enums.Hassas.sağlam && Miktar == Enums.Miktr.orta && Kirlilik == Enums.Kirli.büyük)
+            {
+                DonusHizi = Enums.Donus.guclu;
+                Suresi = Enums.Sure.orta;
+                DeterjanMiktari = Enums.Deterjan.cokFazla;
+            }
+
+
+            if (Hassaslık == Enums.Hassas.sağlam && Miktar == Enums.Miktr.büyük && Kirlilik == Enums.Kirli.küçük)
+            {
+                DonusHizi = Enums.Donus.normalGuclu;
+                Suresi = Enums.Sure.normalUzun;
+                DeterjanMiktari = Enums.Deterjan.fazla;
+            }
+            if (Hassaslık == Enums.Hassas.sağlam && Miktar == Enums.Miktr.büyük && Kirlilik == Enums.Kirli.orta)
+            {
+                DonusHizi = Enums.Donus.normalGuclu;
+                Suresi = Enums.Sure.uzun;
+                DeterjanMiktari = Enums.Deterjan.fazla;
+            }
+            if (Hassaslık == Enums.Hassas.sağlam && Miktar == Enums.Miktr.büyük && Kirlilik == Enums.Kirli.büyük)
+            {
+                DonusHizi = Enums.Donus.guclu;
+                Suresi = Enums.Sure.uzun;
+                DeterjanMiktari = Enums.Deterjan.cokFazla;
             }
 
         }

@@ -130,47 +130,48 @@ namespace Bulanik_Mantik
             flowLayoutPanel1.ResumeLayout();
 
 
-            Tuple<double, double> agirlikliDonusOrtTuple;
+           
+            List<Tuple<double, double>> agirlikliDonusOrtTuple=new List<Tuple<double, double>>();
             for (int i = 0; i < 5; i++)
             {
-                Kural.Donus donus = (Kural.Donus)i;
+                Enums.Donus donus = (Enums.Donus)i;
                 var item = kurallar.Where(a => a.DonusHizi == donus);
                 if (item.Count()>0)
                 {
                     var maxItem = item.First(a=>a.GetMinX==item.Max(b => b.GetMinX));
-                    agirlikliDonusOrtTuple =new Tuple<double, double>(maxItem.GetMinX,maxItem.AğırlıkGetir(Kural.AgirlikMerkez.Donus));
+                    agirlikliDonusOrtTuple.Add(new Tuple<double, double>(maxItem.GetMinX,maxItem.AğırlıkGetir(Enums.AgirlikMerkez.Donus)));
                 }
             }
-
 
             List<Tuple<double, double>> agirlikliDeterjanOrtTuple=new List<Tuple<double, double>>();
             for (int i = 0; i < 5; i++)
             {
-                Kural.Deterjan deterjan = (Kural.Deterjan)i;
+                Enums.Deterjan deterjan = (Enums.Deterjan)i;
                 var item = kurallar.Where(a => a.DeterjanMiktari == deterjan);
                 if (item.Count()>0)
                 {
                     var maxItem = item.First(a=>a.GetMinX==item.Max(b => b.GetMinX));
-                    agirlikliDeterjanOrtTuple.Add(new Tuple<double, double>(maxItem.GetMinX,maxItem.AğırlıkGetir(Kural.AgirlikMerkez.Deterjan)));
+                    agirlikliDeterjanOrtTuple.Add(new Tuple<double, double>(maxItem.GetMinX,maxItem.AğırlıkGetir(Enums.AgirlikMerkez.Deterjan)));
                 }
             }
+            
 
-            agirlikliDeterjanOrtTuple.AgirlikliOrtalamaExt(a => a.Item1, b => b.Item2);
-
-            Tuple<double, double> agirlikliSureOrtTuple;
+            List<Tuple<double, double>> agirlikliSureOrtTuple=new List<Tuple<double, double>>();
             for (int i = 0; i < 5; i++)
             {
-                Kural.Sure sure = (Kural.Sure)i;
+                Enums.Sure sure = (Enums.Sure)i;
                 var item = kurallar.Where(a => a.Suresi == sure);
                 if (item.Count()>0)
                 {
                     var maxItem = item.First(a=>a.GetMinX==item.Max(b => b.GetMinX));
-                    agirlikliSureOrtTuple =new Tuple<double, double>(maxItem.GetMinX,maxItem.AğırlıkGetir(Kural.AgirlikMerkez.Sure));
+                    agirlikliSureOrtTuple.Add(new Tuple<double, double>(maxItem.GetMinX,maxItem.AğırlıkGetir(Enums.AgirlikMerkez.Sure)));
                 }
             }
 
 
-
+            label15.Text=agirlikliDonusOrtTuple.AgirlikliOrtalamaExt(a => a.Item1, b => b.Item2).ToString();
+            label17.Text=agirlikliSureOrtTuple.AgirlikliOrtalamaExt(a => a.Item1, b => b.Item2).ToString();
+            label18.Text=agirlikliDeterjanOrtTuple.AgirlikliOrtalamaExt(a => a.Item1, b => b.Item2).ToString();
 
             //Series series = new Series();
             //series.ChartType = SeriesChartType.Area;
@@ -201,15 +202,18 @@ namespace Bulanik_Mantik
 
         private void trackBar2_Scroll(object sender, EventArgs e)
         {
-            
-            TrackBar tb = sender as TrackBar;
-            NumericUpDown nud=  tb.Parent.Controls.OfType<NumericUpDown>().First();
-            int indis = int.Parse(Regex.Replace(tb.Name, "\\D*", ""));
-            if (e == null) tb.Value = (int) (nud.Value*1000);
-            var temp = (double)tb.Value / 1000;
-            var chart = tb.Parent.Controls.OfType<Panel>().First().Controls.OfType<Chart>().First();
+            //(e != null) Event tetiklenmesi dışında girilmemesi için
+
+            TrackBar activeTrackBar = sender as TrackBar;
+            NumericUpDown activeNumericUpDown=  activeTrackBar.Parent.Controls.OfType<NumericUpDown>().First();
+            int indis = int.Parse(Regex.Replace(activeTrackBar.Name, "\\D*", ""));
+            if (e == null) 
+                activeTrackBar.Value = (int) (activeNumericUpDown.Value*1000);
+            var temp = (double)activeTrackBar.Value / 1000;
+            var chart = activeTrackBar.Parent.Controls.OfType<Panel>().First().Controls.OfType<Chart>().First();
             double X=temp > 0 ? temp : 0.03;
-            if(e!=null) nud.Value = (decimal)X;
+            if(e!=null) 
+                activeNumericUpDown.Value = (decimal)X;
             chart.Series[3].Points[0].XValue = X;
             chart.Series[3].Points[0].Label =(core.KesisimHesapla(temp, (FuzzyLogicCore.KESISIM) (indis - 1)).Min().ToString() + ".000").Substring(0,5);
 

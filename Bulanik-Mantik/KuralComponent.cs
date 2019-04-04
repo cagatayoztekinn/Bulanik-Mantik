@@ -28,9 +28,9 @@ namespace Bulanik_Mantik
         public KuralComponent(Kural kural) : this()
         {
             this.SuspendLayout();
-            label1.Text = kural.ToString(Kural.StringType.Hassas);
-            label2.Text = kural.ToString(Kural.StringType.Miktr);
-            label3.Text = kural.ToString(Kural.StringType.Kirli);
+            label1.Text = kural.ToString(Enums.InputType.Hassas);
+            label2.Text = kural.ToString(Enums.InputType.Miktr);
+            label3.Text = kural.ToString(Enums.InputType.Kirli);
 
 
             label5.Text = kural.x1.ToString();

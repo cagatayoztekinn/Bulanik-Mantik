@@ -63,7 +63,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1048, 28);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1236, 28);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // panel3
@@ -72,10 +72,10 @@
             this.panel3.Controls.Add(this.label3);
             this.panel3.Controls.Add(this.label8);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(699, 1);
+            this.panel3.Location = new System.Drawing.Point(823, 1);
             this.panel3.Margin = new System.Windows.Forms.Padding(0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(348, 26);
+            this.panel3.Size = new System.Drawing.Size(412, 26);
             this.panel3.TabIndex = 2;
             // 
             // label9
@@ -117,10 +117,10 @@
             this.panel2.Controls.Add(this.label2);
             this.panel2.Controls.Add(this.label6);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(350, 1);
+            this.panel2.Location = new System.Drawing.Point(412, 1);
             this.panel2.Margin = new System.Windows.Forms.Padding(0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(348, 26);
+            this.panel2.Size = new System.Drawing.Size(410, 26);
             this.panel2.TabIndex = 1;
             // 
             // label7
@@ -165,8 +165,9 @@
             this.panel1.Location = new System.Drawing.Point(1, 1);
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(348, 26);
+            this.panel1.Size = new System.Drawing.Size(410, 26);
             this.panel1.TabIndex = 0;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // label5
             // 
@@ -208,7 +209,7 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Margin = new System.Windows.Forms.Padding(1);
             this.Name = "KuralComponent";
-            this.Size = new System.Drawing.Size(1048, 28);
+            this.Size = new System.Drawing.Size(1236, 28);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();

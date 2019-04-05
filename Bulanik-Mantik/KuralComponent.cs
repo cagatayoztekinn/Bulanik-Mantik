@@ -38,11 +38,53 @@ namespace Bulanik_Mantik
             label2.Text = kural.ToString(Enums.InputType.Miktr);
             label3.Text = kural.ToString(Enums.InputType.Kirli);
 
+            switch (kural.Hassaslık)
+            {
+                case Enums.Hassas.sağlam:
+                    label1.ForeColor = Color.LimeGreen;
+                    break;
+                case Enums.Hassas.orta:
+                    label1.ForeColor = Color.MediumBlue;
+                    break;
+                case Enums.Hassas.hassas:
+                    label1.ForeColor = Color.MediumVioletRed;
+                    break;
+            }
+
+
+
+            switch (kural.Miktar)
+            {
+                case Enums.Miktr.küçük:
+                    label2.ForeColor = Color.LimeGreen;
+                    break;
+                case Enums.Miktr.orta:
+                    label2.ForeColor = Color.MediumBlue;
+                    break;
+                case Enums.Miktr.büyük:
+                    label2.ForeColor = Color.MediumVioletRed;
+                    break;
+            }
+            switch (kural.Kirlilik)
+            {
+                case Enums.Kirli.küçük:
+                    label3.ForeColor = Color.LimeGreen;
+                    break;
+                case Enums.Kirli.orta:
+                    label3.ForeColor = Color.MediumBlue;
+                    break;
+                case Enums.Kirli.büyük:
+                    label3.ForeColor = Color.MediumVioletRed;
+                    break;
+            }
 
             label5.Text = kural.GetKesisimX[0].ToString();
             label7.Text = kural.GetKesisimX[1].ToString();
             label9.Text = kural.GetKesisimX[2].ToString();
-          
+
+            label5.Text = label5.Text.Length > 5 ? label5.Text.Substring(0, 5) : label5.Text;
+            label7.Text = label7.Text.Length > 5 ? label7.Text.Substring(0, 5) : label7.Text;
+            label9.Text = label9.Text.Length > 5 ? label9.Text.Substring(0, 5) : label9.Text;
 
 
             this.ResumeLayout();
@@ -59,6 +101,11 @@ namespace Bulanik_Mantik
         }
 
         private void Label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
         }

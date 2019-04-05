@@ -18,14 +18,16 @@ namespace Bulanik_Mantik
         public Form1()
         {
             InitializeComponent();
+            CustomInitialize();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        public void CustomInitialize()
         {
+            
             label4.Parent = chart1;
             label5.Parent = chart1;
             label6.Parent = chart1;
-
+            
             label7.Parent = chart2;
             label2.Parent = chart2;
             label3.Parent = chart2;
@@ -40,43 +42,37 @@ namespace Bulanik_Mantik
             trackBar2_Scroll(trackBar2, null);
             trackBar2_Scroll(trackBar3, null);
 
-            for (int i = 0; i < 27; i++)
-            {
+            //Komponentlerin Calışma zamanında kasmaması için arkaplanda öncedn oluşturulur
+            for (int i = 0; i < 8; i++)   
                 flowLayoutPanel1.Controls.Add(new KuralComponent() { Visible = false });
+
+            for (int i = 0; i < 5; i++)
+            {
+                Font font= new Font(new FontFamily("Century"),9 ,FontStyle.Bold);
+                flowLayoutPanel2.Controls.Add(new Label()
+                {   
+                    Text="0",
+                    MaximumSize = new Size(73,20),
+                    Font =font
+                }); 
+                flowLayoutPanel3.Controls.Add(new Label()
+                {   
+                    Text="0",
+                    MaximumSize = new Size(73,20),
+                    Font = font
+                }); 
+                flowLayoutPanel4.Controls.Add(new Label()
+                {   
+                    Text="0",
+                    MaximumSize = new Size(73,20),
+                    Font = font
+                });
             }
-            //LineAnnotation annotation2 = new LineAnnotation();
-            //annotation2.IsSizeAlwaysRelative = false;
-            //annotation2.AxisX = chart1.ChartAreas[0].AxisX;
-            //annotation2.AxisY = chart1.ChartAreas[0].AxisY;
-            //annotation2.AnchorY = minDataPoint;
-            //annotation2.Height = maxDataPoint - minDataPoint;;
-            //annotation2.Width = 0;
-            //annotation2.LineWidth = 2;
-            //annotation2.StartCap = LineAnchorCapStyle.None;
-            //annotation2.EndCap = LineAnchorCapStyle.None;
-            //annotation2.AnchorX = 5;  // <- your point
-            //annotation2.LineColor = Color.Pink; // <- your color
-            //chart1.Annotations.Add(annotation2);
+        }
 
-            List<Point> p = new List<Point>();
-            p.Add(new Point(0, 0));
-            p.Add(new Point(5, 1));
-            p.Add(new Point(6, 1));
-            p.Add(new Point(7, 0));
-
-
-            List<Point> p2 = new List<Point>();
-            p.Add(new Point(1, 0));
-            p.Add(new Point(6, 1));
-            p.Add(new Point(7, 1));
-            p.Add(new Point(8, 0));
-
-            var result = p.Intersect(p2);
-
-            var fl = new FuzzyLogicCore();
-            //fl.HassaslikKesisim(2.75);
-            var x = getnode(new Point(1, 1), new Point(10, 10), new Point(2, 2), new Point(2, 15));
-
+        private  void Form1_Load(object sender, EventArgs e)
+        {
+            
         }
         public PointF getnode(Point A, Point B, Point C, Point D)
         {
@@ -106,15 +102,21 @@ namespace Bulanik_Mantik
         private void button1_Click(object sender, EventArgs e)
         {
 
-            if (flowLayoutPanel1.Controls.Count !=27) return;
+            Hesapla();
 
-            int sayici = 0;
+        }
+
+        public void Hesapla()
+        {
+            if (flowLayoutPanel1.Controls.Count !=8) return;
+
+            int componentCounter = 0;
 
             double x1, x2, x3;
             x1 = (double)numericUpDown1.Value;
             x2 = (double)numericUpDown2.Value;
             x3 = (double)numericUpDown3.Value;
-
+           
             // flowLayoutPanel1.Controls.Clear();
             flowLayoutPanel1.SuspendLayout();
             List<Kural> kurallar = new List<Kural>();
@@ -130,7 +132,7 @@ namespace Bulanik_Mantik
                         kural.XValues(x1, x2, x3);
                         kurallar.Add(kural);
 
-                        KuralComponent kuralComp = flowLayoutPanel1.Controls[sayici++] as KuralComponent;
+                        KuralComponent kuralComp = flowLayoutPanel1.Controls[componentCounter++] as KuralComponent;
                         kuralComp.SetKural(kural);
                         kuralComp.Visible = true;
                     }
@@ -138,7 +140,7 @@ namespace Bulanik_Mantik
             }
 
             var count = flowLayoutPanel1.Controls.OfType<KuralComponent>().Where(a => a.Visible == true).Count();
-            for (int i = sayici; i < 27; i++)
+            for (int i = componentCounter; i < 8; i++)
                     flowLayoutPanel1.Controls[i].Visible = false;
             flowLayoutPanel1.ResumeLayout();
 
@@ -160,6 +162,10 @@ namespace Bulanik_Mantik
 
                 if (maxTupple!=null)
                 {
+                    var maxLabel = flowLayoutPanel2.Controls[i] as Label;
+                    string labelStr = maxTupple.Item1.ToString().Length>5? maxTupple.Item1.ToString().Substring(0,5): maxTupple.Item1.ToString();
+                    maxLabel.Text = labelStr;
+
                     Series series = chart4.Series.Any(a=>a.Name=="area"+i)?chart4.Series["area"+i]: new Series("area"+i);
                     series.ChartType = SeriesChartType.Area;
                     series.Color = Color.FromArgb(175, 255-(i*51), i*51,255/ (i + 1) );
@@ -171,6 +177,7 @@ namespace Bulanik_Mantik
                     
                     if (!chart4.Series.Contains(series))
                         chart4.Series.Add(series);
+
                 }
             }
 
@@ -190,6 +197,10 @@ namespace Bulanik_Mantik
 
                 if (maxTupple!=null)
                 {
+                    var maxLabel = flowLayoutPanel2.Controls[i] as Label;
+                    string labelStr = maxTupple.Item1.ToString().Length>5? maxTupple.Item1.ToString().Substring(0,5): maxTupple.Item1.ToString();
+                    maxLabel.Text = labelStr;
+
                     Series series = chart5.Series.Any(a=>a.Name=="area"+i)?chart5.Series["area"+i]: new Series("area"+i);
                     series.ChartType = SeriesChartType.Area;
                     series.Color = Color.FromArgb(175, 255-(i*51), i*51,255/ (i + 1) );
@@ -221,6 +232,10 @@ namespace Bulanik_Mantik
 
                 if (maxTupple!=null)
                 {
+                    var maxLabel = flowLayoutPanel2.Controls[i] as Label;
+                    string labelStr = maxTupple.Item1.ToString().Length>5? maxTupple.Item1.ToString().Substring(0,5): maxTupple.Item1.ToString();
+                    maxLabel.Text = labelStr;
+
                     Series series = chart6.Series.Any(a=>a.Name=="area"+i)?chart6.Series["area"+i]: new Series("area"+i);
                     series.ChartType = SeriesChartType.Area;
                     series.Color = Color.FromArgb(175, 255-(i*51), i*51,255/ (i + 1) );
@@ -242,7 +257,6 @@ namespace Bulanik_Mantik
           
 
         }
-
         private void trackBar1_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -264,7 +278,7 @@ namespace Bulanik_Mantik
             TrackBar activeTrackBar = sender as TrackBar;
             NumericUpDown activeNumericUpDown = activeTrackBar.Parent.Controls.OfType<NumericUpDown>().First();
             int indis = int.Parse(Regex.Replace(activeTrackBar.Name, "\\D*", ""));
-            if (e == null)
+            if (e == null && activeTrackBar.Value<9975)
                 activeTrackBar.Value = (int)(activeNumericUpDown.Value * 1000);
             var temp = (double)activeTrackBar.Value / 1000;
             var chart = activeTrackBar.Parent.Controls.OfType<Panel>().First().Controls.OfType<Chart>().First();
@@ -272,9 +286,10 @@ namespace Bulanik_Mantik
             if (e != null)
                 activeNumericUpDown.Value = (decimal)X;
             chart.Series[3].Points[0].XValue = X;
-            chart.Series[3].Points[0].Label = (core.KesisimHesapla(temp, (FuzzyLogicCore.KESISIM)(indis - 1)).Min().ToString() + ".000").Substring(0, 5);
+            string lineStr =(core.KesisimHesapla(temp, (FuzzyLogicCore.KESISIM)(indis - 1)).Min().ToString());
+                chart.Series[3].Points[0].Label = lineStr.Length>5?lineStr.Substring(0, 5):lineStr;
             if (e != null)
-                button1_Click(null, null);
+                Hesapla();
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
@@ -282,6 +297,7 @@ namespace Bulanik_Mantik
             if (!(sender as Control).Focused) return;
             TrackBar tb = (sender as Control).Parent.Controls.OfType<TrackBar>().First();
             trackBar2_Scroll(tb, null);
+            Hesapla();
         }
 
         private void Label1_Click(object sender, EventArgs e)

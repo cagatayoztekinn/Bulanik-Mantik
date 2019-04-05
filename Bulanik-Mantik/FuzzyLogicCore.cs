@@ -8,74 +8,7 @@ using System.Threading.Tasks;
 namespace Bulanik_Mantik
 {
 
-    public static class Enums
-    {
-        #region Enumlar
-        public enum InputType
-        {
-            Hassas,
-            Miktr,
-            Kirli
-        }
-
-        public enum AgirlikMerkez
-        {
-            Donus,
-            Deterjan,
-            Sure
-        }
-
-        public enum Hassas
-        {
-            sağlam,
-            orta,
-            hassas
-        }
-
-        public enum Miktr
-        {
-            küçük,
-            orta,
-            büyük
-        }
-
-        public enum Kirli
-        {
-            küçük,
-            orta,
-            büyük
-        }
-
-
-        public enum Donus
-        {
-            hassas,
-            normalHassas,
-            orta,
-            normalGuclu,
-            guclu
-        }
-
-        public enum Deterjan
-        {
-            cokAz,
-            az,
-            orta,
-            fazla,
-            cokFazla
-        }
-
-        public enum Sure
-        {
-            kısa,
-            normalKısa,
-            orta,
-            normalUzun,
-            uzun
-        }
-
-        #endregion
-    }
+   
     public class FuzzyLogicCore
     {
         public enum KESISIM
@@ -217,20 +150,21 @@ namespace Bulanik_Mantik
             return kesisimler;
         }
 
-        public List<PointF> AreaHesapla(Enums.AgirlikMerkez outputMerkez, double x, int areaId)
+        #region Tablo alanlarının Koordinatların hesaplanması
+        public List<PointF> AreaHesapla(Enums.AgirlikMerkez outputMerkez, double y, int areaId)
         {
             switch (outputMerkez)
             {
                 case Enums.AgirlikMerkez.Donus:
-                    return AreaDonusHizi(x, areaId);
+                    return AreaDonusHizi(y, areaId);
                 case Enums.AgirlikMerkez.Deterjan:
-                    return AreaDeterjan(x, areaId);
+                    return AreaDeterjan(y, areaId);
                 case Enums.AgirlikMerkez.Sure:
-                    return AreaSure(x, areaId);
+                    return AreaSure(y, areaId);
             }
             return new List<PointF>();
         }
-        private List<PointF> AreaDonusHizi(double x, int areaId)
+        private List<PointF> AreaDonusHizi(double y, int areaId)
         {
             double[] d1, d2, d3, d4, d5;
             d1 = new double[] { -5.8, -2.8, 0.5, 1.5 };
@@ -241,85 +175,64 @@ namespace Bulanik_Mantik
             List<PointF> noktalar = new List<PointF>();
             double sonuc;
 
-
             if (areaId == 0)
             {
-
                 noktalar.Add(new PointF((float)d1[0], 0));
-
-                sonuc = d1[0] + (x * (Math.Abs(d1[0] - d1[1])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
-                sonuc = d1[3] - (x * (Math.Abs(d1[2] - d1[3])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
+                sonuc = d1[0] + (y * (Math.Abs(d1[0] - d1[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
+                sonuc = d1[3] - (y * (Math.Abs(d1[2] - d1[3])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
                 noktalar.Add(new PointF((float)d1[3], 0));
             }
 
             if (areaId == 1)
             {
-
                 noktalar.Add(new PointF((float)d2[0], 0));
-
-                sonuc = d2[0] + (x * (Math.Abs(d2[0] - d2[1])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
-                sonuc = d2[2] - (x * (Math.Abs(d2[1] - d2[2])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
+                sonuc = d2[0] + (y * (Math.Abs(d2[0] - d2[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
+                sonuc = d2[2] - (y * (Math.Abs(d2[1] - d2[2])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
                 noktalar.Add(new PointF((float)d2[2], 0));
             }
 
             if (areaId == 2)
             {
-
                 noktalar.Add(new PointF((float)d3[0], 0));
-
-                sonuc = d3[0] + (x * (Math.Abs(d3[0] - d3[1])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
-                sonuc = d3[2] - (x * (Math.Abs(d3[1] - d3[2])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
+                sonuc = d3[0] + (y * (Math.Abs(d3[0] - d3[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
+                sonuc = d3[2] - (y * (Math.Abs(d3[1] - d3[2])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
                 noktalar.Add(new PointF((float)d3[2], 0));
             }
             if (areaId == 3)
             {
-
                 noktalar.Add(new PointF((float)d4[0], 0));
-
-                sonuc = d4[0] + (x * (Math.Abs(d4[0] - d4[1])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
-                sonuc = d4[2] - (x * (Math.Abs(d4[1] - d4[2])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
+                sonuc = d4[0] + (y * (Math.Abs(d4[0] - d4[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
+                sonuc = d4[2] - (y * (Math.Abs(d4[1] - d4[2])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
                 noktalar.Add(new PointF((float)d4[2], 0));
             }
 
             if (areaId == 4)
             {
-
                 noktalar.Add(new PointF((float)d5[0], 0));
-
-                sonuc = d5[0] + (x * (Math.Abs(d5[0] - d5[1])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
-                sonuc = d5[3] - (x * (Math.Abs(d5[2] - d5[3])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
+                sonuc = d5[0] + (y * (Math.Abs(d5[0] - d5[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
+                sonuc = d5[3] - (y * (Math.Abs(d5[2] - d5[3])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
                 noktalar.Add(new PointF((float)d5[3], 0));
             }
 
             return noktalar;
         }
-        private List<PointF> AreaDeterjan(double x, int areaId)
+        private List<PointF> AreaDeterjan(double y, int areaId)
         {
             double[] d1, d2, d3, d4, d5;
             d1 = new double[] { 0, 0, 20, 85 };
             d2 = new double[] { 20, 85, 150 };
             d3 = new double[] { 85, 150, 215 };
-            d4 = new double[] { 150, 215, 280};
+            d4 = new double[] { 150, 215, 280 };
             d5 = new double[] { 215, 280, 300, 300 };
             List<PointF> noktalar = new List<PointF>();
             double sonuc;
@@ -328,78 +241,61 @@ namespace Bulanik_Mantik
             if (areaId == 0)
             {
                 noktalar.Add(new PointF((float)d1[0], 0));
-                noktalar.Add(new PointF((float)d1[1], (float)x));
-
-                sonuc = d1[3] - (x * (Math.Abs(d1[2] - d1[3])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
+                noktalar.Add(new PointF((float)d1[1], (float)y));
+                sonuc = d1[3] - (y * (Math.Abs(d1[2] - d1[3])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
                 noktalar.Add(new PointF((float)d1[3], 0));
             }
 
             if (areaId == 1)
             {
-
                 noktalar.Add(new PointF((float)d2[0], 0));
-
-                sonuc = d2[0] + (x * (Math.Abs(d2[0] - d2[1])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
-                sonuc = d2[2] - (x * (Math.Abs(d2[1] - d2[2])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
+                sonuc = d2[0] + (y * (Math.Abs(d2[0] - d2[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
+                sonuc = d2[2] - (y * (Math.Abs(d2[1] - d2[2])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
                 noktalar.Add(new PointF((float)d2[2], 0));
             }
 
             if (areaId == 2)
             {
-
                 noktalar.Add(new PointF((float)d3[0], 0));
-
-                sonuc = d3[0] + (x * (Math.Abs(d3[0] - d3[1])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
-                sonuc = d3[2] - (x * (Math.Abs(d3[1] - d3[2])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
+                sonuc = d3[0] + (y * (Math.Abs(d3[0] - d3[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
+                sonuc = d3[2] - (y * (Math.Abs(d3[1] - d3[2])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
                 noktalar.Add(new PointF((float)d3[2], 0));
             }
             if (areaId == 3)
             {
 
                 noktalar.Add(new PointF((float)d4[0], 0));
-
-                sonuc = d4[0] + (x * (Math.Abs(d4[0] - d4[1])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
-                sonuc = d4[2] - (x * (Math.Abs(d4[1] - d4[2])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
+                sonuc = d4[0] + (y * (Math.Abs(d4[0] - d4[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
+                sonuc = d4[2] - (y * (Math.Abs(d4[1] - d4[2])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
                 noktalar.Add(new PointF((float)d4[2], 0));
             }
 
             if (areaId == 4)
             {
-
                 noktalar.Add(new PointF((float)d5[0], 0));
-
-                sonuc = d5[0] + (x * (Math.Abs(d5[0] - d5[1])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
-                sonuc = d5[3] - (x * (Math.Abs(d5[2] - d5[3])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
+                sonuc = d5[0] + (y * (Math.Abs(d5[0] - d5[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
+                sonuc = d5[3] - (y * (Math.Abs(d5[2] - d5[3])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
                 noktalar.Add(new PointF((float)d5[3], 0));
             }
 
             return noktalar;
         }
-        private List<PointF> AreaSure(double x, int areaId)
+        private List<PointF> AreaSure(double y, int areaId)
         {
             double[] d1, d2, d3, d4, d5;
-            d1 = new double[] { -46.5, -25.28, 22.3, 39.9};
-            d2 = new double[] {22.3, 39.9, 57.5};
-            d3 = new double[] {39.9, 57.5, 75.1 };
-            d4 = new double[] {57.5, 75.1, 92.7 };
+            d1 = new double[] { -46.5, -25.28, 22.3, 39.9 };
+            d2 = new double[] { 22.3, 39.9, 57.5 };
+            d3 = new double[] { 39.9, 57.5, 75.1 };
+            d4 = new double[] { 57.5, 75.1, 92.7 };
             d5 = new double[] { 75, 92.7, 111.6, 130 };
             List<PointF> noktalar = new List<PointF>();
             double sonuc;
@@ -407,70 +303,50 @@ namespace Bulanik_Mantik
 
             if (areaId == 0)
             {
-
                 noktalar.Add(new PointF((float)d1[0], 0));
-
-                sonuc = d1[0]+(x * (Math.Abs(d1[0] - d1[1])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
-                sonuc = d1[3]- (x * (Math.Abs(d1[2] - d1[3])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
+                sonuc = d1[0] + (y * (Math.Abs(d1[0] - d1[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
+                sonuc = d1[3] - (y * (Math.Abs(d1[2] - d1[3])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
                 noktalar.Add(new PointF((float)d1[3], 0));
             }
 
             if (areaId == 1)
             {
-
                 noktalar.Add(new PointF((float)d2[0], 0));
-
-                sonuc = d2[0] + (x * (Math.Abs(d2[0] - d2[1])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
-                sonuc = d2[2] - (x * (Math.Abs(d2[1] - d2[2])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
+                sonuc = d2[0] + (y * (Math.Abs(d2[0] - d2[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
+                sonuc = d2[2] - (y * (Math.Abs(d2[1] - d2[2])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
                 noktalar.Add(new PointF((float)d2[2], 0));
             }
 
             if (areaId == 2)
             {
-
                 noktalar.Add(new PointF((float)d3[0], 0));
-
-                sonuc = d3[0] + (x * (Math.Abs(d3[0] - d3[1])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
-                sonuc = d3[2] - (x * (Math.Abs(d3[1] - d3[2])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
+                sonuc = d3[0] + (y * (Math.Abs(d3[0] - d3[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
+                sonuc = d3[2] - (y * (Math.Abs(d3[1] - d3[2])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
                 noktalar.Add(new PointF((float)d3[2], 0));
             }
             if (areaId == 3)
             {
-
                 noktalar.Add(new PointF((float)d4[0], 0));
-
-                sonuc = d4[0] + (x * (Math.Abs(d4[0] - d4[1])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
-                sonuc = d4[2] - (x * (Math.Abs(d4[1] - d4[2])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
+                sonuc = d4[0] + (y * (Math.Abs(d4[0] - d4[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
+                sonuc = d4[2] - (y * (Math.Abs(d4[1] - d4[2])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
                 noktalar.Add(new PointF((float)d4[2], 0));
             }
 
             if (areaId == 4)
             {
-
                 noktalar.Add(new PointF((float)d5[0], 0));
-
-                sonuc = d5[0] + (x * (Math.Abs(d5[0] - d5[1])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
-                sonuc = d5[3] - (x * (Math.Abs(d5[2] - d5[3])));
-                noktalar.Add(new PointF((float)sonuc, (float)x));
-
+                sonuc = d5[0] + (y * (Math.Abs(d5[0] - d5[1])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
+                sonuc = d5[3] - (y * (Math.Abs(d5[2] - d5[3])));
+                noktalar.Add(new PointF((float)sonuc, (float)y));
                 noktalar.Add(new PointF((float)d5[3], 0));
             }
 
@@ -478,6 +354,7 @@ namespace Bulanik_Mantik
         }
 
 
+        #endregion
 
 
         private List<double> KirlilikKesisim(double d, int sekilIndex)
@@ -533,7 +410,7 @@ namespace Bulanik_Mantik
 
     }
 
-    public static class extensions
+    public static class Extensions
     {
         public static double AgirlikliOrtalamaExt<T>(this IEnumerable<T> records, Func<T, double> value, Func<T, double> weight)
         {
@@ -542,399 +419,8 @@ namespace Bulanik_Mantik
 
             if (weightSum != 0)
                 return weightedValueSum / weightSum;
-            else
-                return 0;
-            //throw new DivideByZeroException("Your message here");
-        }
-    }
-    public class Kural
-    {
-
-        public Enums.Hassas Hassaslık { get; set; }
-        public Enums.Miktr Miktar { get; set; }
-        public Enums.Kirli Kirlilik { get; set; }
-
-        public Enums.Donus DonusHizi { get; set; }
-        public Enums.Deterjan DeterjanMiktari { get; set; }
-        public Enums.Sure Suresi { get; set; }
-        public double x1 { get; set; }
-        public double x2 { get; set; }
-        public double x3 { get; set; }
-
-        FuzzyLogicCore core = new FuzzyLogicCore();
-        public double GetMinKesisimX
-        {
-            get
-            {
-                //Minimum Seçimi
-                return GetKesisimX.Where(a => a != -1).Min();
-            }
-        }
-        public double[] GetKesisimX
-        {
-            get
-            {
-                List<double> list = new List<double>();
-                list.Add(core.KesisimHesapla(x1, FuzzyLogicCore.KESISIM.HASSASLIK, (int)Hassaslık).Single());
-                list.Add(core.KesisimHesapla(x2, FuzzyLogicCore.KESISIM.MIKTAR, (int)Miktar).Single());
-                list.Add(core.KesisimHesapla(x3, FuzzyLogicCore.KESISIM.KIRLILIK, (int)Kirlilik).Single());
-                return list.ToArray();
-            }
-        }
-
-        public Kural(Enums.Hassas Hassaslık, Enums.Miktr Miktar, Enums.Kirli kirlilik)
-        {
-            this.Hassaslık = Hassaslık;
-            this.Miktar = Miktar;
-            this.Kirlilik = kirlilik;
-            Kurallar();
-        }
-
-
-
-        public Kural(string Hassaslık, string Miktar, string kirlilik)
-        {
-            Enums.Hassas h = 0;
-            Enums.Miktr m = 0;
-            Enums.Kirli k = 0;
-            switch (Hassaslık)
-            {
-                case "Sağlam":
-                    h = Enums.Hassas.sağlam;
-                    break;
-                case "Orta":
-                    h = Enums.Hassas.orta;
-                    break;
-                case "Hassas":
-                    h = Enums.Hassas.hassas;
-                    break;
-            }
-
-            switch (Miktar)
-            {
-                case "Küçük":
-                    m = Enums.Miktr.küçük;
-                    break;
-                case "Orta":
-                    m = Enums.Miktr.orta;
-                    break;
-                case "Büyük":
-                    m = Enums.Miktr.büyük;
-                    break;
-            }
-
-            switch (kirlilik)
-            {
-                case "Küçük":
-                    k = Enums.Kirli.küçük;
-                    break;
-                case "Orta":
-                    k = Enums.Kirli.orta;
-                    break;
-                case "Büyük":
-                    k = Enums.Kirli.büyük;
-                    break;
-            }
-
-            this.Hassaslık = h;
-            this.Miktar = m;
-            this.Kirlilik = k;
-            Kurallar();
-
-        }
-
-        public double AğırlıkGetir(Enums.AgirlikMerkez m)
-        {
-            double donme_agirlik = 0, sure_agirlik = 0, deterjan_agirlik = 0;
-            switch (DonusHizi)
-            {
-                case Enums.Donus.hassas:
-                    donme_agirlik = -1.15;
-                    break;
-                case Enums.Donus.normalHassas:
-                    donme_agirlik = 2.75;
-                    break;
-                case Enums.Donus.orta:
-                    donme_agirlik = 5;
-                    break;
-                case Enums.Donus.normalGuclu:
-                    donme_agirlik = 7.25;
-                    break;
-                case Enums.Donus.guclu:
-                    donme_agirlik = 11.15;
-                    break;
-            }
-
-            switch (Suresi)
-            {
-                case Enums.Sure.kısa:
-                    sure_agirlik = 23.79;
-                    break;
-                case Enums.Sure.normalKısa:
-                    sure_agirlik = 39.9;
-                    break;
-                case Enums.Sure.orta:
-                    sure_agirlik = 57.5;
-                    break;
-                case Enums.Sure.normalUzun:
-                    sure_agirlik = 75.1;
-                    break;
-                case Enums.Sure.uzun:
-                    sure_agirlik = 102.15;
-                    break;
-            }
-
-
-            switch (DeterjanMiktari)
-            {
-                case Enums.Deterjan.cokAz:
-                    deterjan_agirlik = 10;
-                    break;
-                case Enums.Deterjan.az:
-                    deterjan_agirlik = 85;
-                    break;
-                case Enums.Deterjan.orta:
-                    deterjan_agirlik = 150;
-                    break;
-                case Enums.Deterjan.fazla:
-                    deterjan_agirlik = 215;
-                    break;
-                case Enums.Deterjan.cokFazla:
-                    deterjan_agirlik = 290;
-                    break;
-            }
-
-            switch (m)
-            {
-                case Enums.AgirlikMerkez.Donus: return donme_agirlik;
-                case Enums.AgirlikMerkez.Deterjan: return deterjan_agirlik;
-                case Enums.AgirlikMerkez.Sure: return sure_agirlik;
-            }
             return 0;
         }
-
-
-        public void XValues(Double x1, Double x2, Double x3)
-        {
-            this.x1 = x1;
-            this.x2 = x2;
-            this.x3 = x3;
-        }
-        public string ToString(Enums.InputType type)
-        {
-            switch (type)
-            {
-                case Enums.InputType.Hassas:
-                    switch (Hassaslık)
-                    {
-                        case Enums.Hassas.sağlam: return "Sağlam";
-                        case Enums.Hassas.orta: return "Orta";
-                        case Enums.Hassas.hassas: return "Hassas";
-                    }
-                    break;
-                case Enums.InputType.Miktr:
-                    switch (Miktar)
-                    {
-                        case Enums.Miktr.küçük: return "Küçük";
-                        case Enums.Miktr.orta: return "Orta";
-                        case Enums.Miktr.büyük: return "Büyük";
-                    }
-                    break;
-                case Enums.InputType.Kirli:
-                    switch (Kirlilik)
-                    {
-                        case Enums.Kirli.küçük: return "Küçük";
-                        case Enums.Kirli.orta: return "Orta";
-                        case Enums.Kirli.büyük: return "Büyük";
-                    }
-                    break;
-            }
-            return base.ToString();
-        }
-        private void Kurallar()
-        {
-
-            if (Hassaslık == Enums.Hassas.hassas && Miktar == Enums.Miktr.küçük && Kirlilik == Enums.Kirli.küçük)
-            {
-                DonusHizi = Enums.Donus.hassas;
-                Suresi = Enums.Sure.kısa;
-                DeterjanMiktari = Enums.Deterjan.cokAz;
-            }
-            if (Hassaslık == Enums.Hassas.hassas && Miktar == Enums.Miktr.küçük && Kirlilik == Enums.Kirli.orta)
-            {
-                DonusHizi = Enums.Donus.normalHassas;
-                Suresi = Enums.Sure.kısa;
-                DeterjanMiktari = Enums.Deterjan.az;
-            }
-            if (Hassaslık == Enums.Hassas.hassas && Miktar == Enums.Miktr.küçük && Kirlilik == Enums.Kirli.büyük)
-            {
-                DonusHizi = Enums.Donus.orta;
-                Suresi = Enums.Sure.normalKısa;
-                DeterjanMiktari = Enums.Deterjan.orta;
-            }
-
-
-            if (Hassaslık == Enums.Hassas.hassas && Miktar == Enums.Miktr.orta && Kirlilik == Enums.Kirli.küçük)
-            {
-                DonusHizi = Enums.Donus.hassas;
-                Suresi = Enums.Sure.kısa;
-                DeterjanMiktari = Enums.Deterjan.orta;
-            }
-            if (Hassaslık == Enums.Hassas.hassas && Miktar == Enums.Miktr.orta && Kirlilik == Enums.Kirli.orta)
-            {
-                DonusHizi = Enums.Donus.normalHassas;
-                Suresi = Enums.Sure.normalKısa;
-                DeterjanMiktari = Enums.Deterjan.orta;
-            }
-            if (Hassaslık == Enums.Hassas.hassas && Miktar == Enums.Miktr.orta && Kirlilik == Enums.Kirli.büyük)
-            {
-                DonusHizi = Enums.Donus.orta;
-                Suresi = Enums.Sure.orta;
-                DeterjanMiktari = Enums.Deterjan.fazla;
-            }
-
-
-            if (Hassaslık == Enums.Hassas.hassas && Miktar == Enums.Miktr.büyük && Kirlilik == Enums.Kirli.küçük)
-            {
-                DonusHizi = Enums.Donus.normalHassas;
-                Suresi = Enums.Sure.normalKısa;
-                DeterjanMiktari = Enums.Deterjan.orta;
-            }
-            if (Hassaslık == Enums.Hassas.hassas && Miktar == Enums.Miktr.büyük && Kirlilik == Enums.Kirli.orta)
-            {
-                DonusHizi = Enums.Donus.normalHassas;
-                Suresi = Enums.Sure.orta;
-                DeterjanMiktari = Enums.Deterjan.fazla;
-            }
-            if (Hassaslık == Enums.Hassas.hassas && Miktar == Enums.Miktr.büyük && Kirlilik == Enums.Kirli.büyük)
-            {
-                DonusHizi = Enums.Donus.orta;
-                Suresi = Enums.Sure.normalUzun;
-                DeterjanMiktari = Enums.Deterjan.fazla;
-            }
-
-
-            if (Hassaslık == Enums.Hassas.orta && Miktar == Enums.Miktr.küçük && Kirlilik == Enums.Kirli.küçük)
-            {
-                DonusHizi = Enums.Donus.normalHassas;
-                Suresi = Enums.Sure.normalKısa;
-                DeterjanMiktari = Enums.Deterjan.az;
-            }
-            if (Hassaslık == Enums.Hassas.orta && Miktar == Enums.Miktr.küçük && Kirlilik == Enums.Kirli.orta)
-            {
-                DonusHizi = Enums.Donus.orta;
-                Suresi = Enums.Sure.kısa;
-                DeterjanMiktari = Enums.Deterjan.orta;
-            }
-            if (Hassaslık == Enums.Hassas.orta && Miktar == Enums.Miktr.küçük && Kirlilik == Enums.Kirli.büyük)
-            {
-                DonusHizi = Enums.Donus.normalGuclu;
-                Suresi = Enums.Sure.orta;
-                DeterjanMiktari = Enums.Deterjan.fazla;
-            }
-
-
-
-            if (Hassaslık == Enums.Hassas.orta && Miktar == Enums.Miktr.orta && Kirlilik == Enums.Kirli.küçük)
-            {
-                DonusHizi = Enums.Donus.normalHassas;
-                Suresi = Enums.Sure.normalKısa;
-                DeterjanMiktari = Enums.Deterjan.orta;
-            }
-            if (Hassaslık == Enums.Hassas.orta && Miktar == Enums.Miktr.orta && Kirlilik == Enums.Kirli.orta)
-            {
-                DonusHizi = Enums.Donus.orta;
-                Suresi = Enums.Sure.orta;
-                DeterjanMiktari = Enums.Deterjan.orta;
-            }
-            if (Hassaslık == Enums.Hassas.orta && Miktar == Enums.Miktr.orta && Kirlilik == Enums.Kirli.büyük)
-            {
-                DonusHizi = Enums.Donus.hassas;
-                Suresi = Enums.Sure.uzun;
-                DeterjanMiktari = Enums.Deterjan.fazla;
-            }
-
-
-            if (Hassaslık == Enums.Hassas.orta && Miktar == Enums.Miktr.büyük && Kirlilik == Enums.Kirli.küçük)
-            {
-                DonusHizi = Enums.Donus.hassas;
-                Suresi = Enums.Sure.orta;
-                DeterjanMiktari = Enums.Deterjan.orta;
-            }
-            if (Hassaslık == Enums.Hassas.orta && Miktar == Enums.Miktr.büyük && Kirlilik == Enums.Kirli.orta)
-            {
-                DonusHizi = Enums.Donus.hassas;
-                Suresi = Enums.Sure.normalUzun;
-                DeterjanMiktari = Enums.Deterjan.fazla;
-            }
-            if (Hassaslık == Enums.Hassas.orta && Miktar == Enums.Miktr.büyük && Kirlilik == Enums.Kirli.büyük)
-            {
-                DonusHizi = Enums.Donus.hassas;
-                Suresi = Enums.Sure.uzun;
-                DeterjanMiktari = Enums.Deterjan.cokFazla;
-            }
-
-
-
-            if (Hassaslık == Enums.Hassas.sağlam && Miktar == Enums.Miktr.küçük && Kirlilik == Enums.Kirli.küçük)
-            {
-                DonusHizi = Enums.Donus.orta;
-                Suresi = Enums.Sure.orta;
-                DeterjanMiktari = Enums.Deterjan.az;
-            }
-            if (Hassaslık == Enums.Hassas.sağlam && Miktar == Enums.Miktr.küçük && Kirlilik == Enums.Kirli.orta)
-            {
-                DonusHizi = Enums.Donus.normalGuclu;
-                Suresi = Enums.Sure.orta;
-                DeterjanMiktari = Enums.Deterjan.orta;
-            }
-            if (Hassaslık == Enums.Hassas.sağlam && Miktar == Enums.Miktr.küçük && Kirlilik == Enums.Kirli.büyük)
-            {
-                DonusHizi = Enums.Donus.guclu;
-                Suresi = Enums.Sure.normalUzun;
-                DeterjanMiktari = Enums.Deterjan.fazla;
-            }
-
-
-            if (Hassaslık == Enums.Hassas.sağlam && Miktar == Enums.Miktr.orta && Kirlilik == Enums.Kirli.küçük)
-            {
-                DonusHizi = Enums.Donus.orta;
-                Suresi = Enums.Sure.orta;
-                DeterjanMiktari = Enums.Deterjan.orta;
-            }
-            if (Hassaslık == Enums.Hassas.sağlam && Miktar == Enums.Miktr.orta && Kirlilik == Enums.Kirli.orta)
-            {
-                DonusHizi = Enums.Donus.normalGuclu;
-                Suresi = Enums.Sure.normalUzun;
-                DeterjanMiktari = Enums.Deterjan.orta;
-            }
-            if (Hassaslık == Enums.Hassas.sağlam && Miktar == Enums.Miktr.orta && Kirlilik == Enums.Kirli.büyük)
-            {
-                DonusHizi = Enums.Donus.guclu;
-                Suresi = Enums.Sure.orta;
-                DeterjanMiktari = Enums.Deterjan.cokFazla;
-            }
-
-
-            if (Hassaslık == Enums.Hassas.sağlam && Miktar == Enums.Miktr.büyük && Kirlilik == Enums.Kirli.küçük)
-            {
-                DonusHizi = Enums.Donus.normalGuclu;
-                Suresi = Enums.Sure.normalUzun;
-                DeterjanMiktari = Enums.Deterjan.fazla;
-            }
-            if (Hassaslık == Enums.Hassas.sağlam && Miktar == Enums.Miktr.büyük && Kirlilik == Enums.Kirli.orta)
-            {
-                DonusHizi = Enums.Donus.normalGuclu;
-                Suresi = Enums.Sure.uzun;
-                DeterjanMiktari = Enums.Deterjan.fazla;
-            }
-            if (Hassaslık == Enums.Hassas.sağlam && Miktar == Enums.Miktr.büyük && Kirlilik == Enums.Kirli.büyük)
-            {
-                DonusHizi = Enums.Donus.guclu;
-                Suresi = Enums.Sure.uzun;
-                DeterjanMiktari = Enums.Deterjan.cokFazla;
-            }
-
-        }
     }
+
 }

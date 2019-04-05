@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Bulanik_Mantik
 {
 
-   
+
     public class FuzzyLogicCore
     {
         public enum KESISIM
@@ -370,19 +370,19 @@ namespace Bulanik_Mantik
             if (d >= 0 && d <= 2)
                 d1 = 1;
             else if (d >= 2 && d <= 4.5)
-                d1 = 1 - (d - 2) * (1 / Math.Abs((2.0) - (4.5)));
+                d1 = (4.5 - d) / Math.Abs((2.0) - (4.5));
 
             if (d >= 3 && d <= 5)
                 d2 = (d - 3) * (1 / Math.Abs((3.0) - (5.0)));
             else if (d >= 5 && d <= 7)
-                d2 = 1 - (d - 5) * (1 / Math.Abs((5.0) - (7.0)));
+                d2 = (7 - d) / Math.Abs((5.0) - (7.0));
 
             if (d >= 5.5 && d <= 8)
                 d3 = (d - 5.5) * (1 / Math.Abs((5.5) - (8)));
             else if (d >= 8 && d <= 12.5)
                 d3 = 1;
             else if (d >= 12.5 && d <= 15)
-                d3 = 1 - ((d - 12.5) * (1 / Math.Abs((12.5) - (15.0))));
+                d3 = (15 - d) / Math.Abs((12.5) - (15.0));
 
             if (d1 > -1)
             {

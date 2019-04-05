@@ -48,23 +48,23 @@ namespace Bulanik_Mantik
 
             for (int i = 0; i < 5; i++)
             {
-                Font font= new Font(new FontFamily("Century"),9 ,FontStyle.Bold);
+                Font font= new Font(new FontFamily("Century"),8 ,FontStyle.Bold);
                 flowLayoutPanel2.Controls.Add(new Label()
                 {   
                     Text="0",
-                    MaximumSize = new Size(73,20),
+                    MaximumSize = new Size(52,20),
                     Font =font
                 }); 
                 flowLayoutPanel3.Controls.Add(new Label()
                 {   
                     Text="0",
-                    MaximumSize = new Size(73,20),
+                    MaximumSize = new Size(52,20),
                     Font = font
                 }); 
                 flowLayoutPanel4.Controls.Add(new Label()
                 {   
                     Text="0",
-                    MaximumSize = new Size(73,20),
+                    MaximumSize = new Size(52,20),
                     Font = font
                 });
             }
@@ -197,7 +197,7 @@ namespace Bulanik_Mantik
 
                 if (maxTupple!=null)
                 {
-                    var maxLabel = flowLayoutPanel2.Controls[i] as Label;
+                    var maxLabel = flowLayoutPanel3.Controls[i] as Label;
                     string labelStr = maxTupple.Item1.ToString().Length>5? maxTupple.Item1.ToString().Substring(0,5): maxTupple.Item1.ToString();
                     maxLabel.Text = labelStr;
 
@@ -232,7 +232,7 @@ namespace Bulanik_Mantik
 
                 if (maxTupple!=null)
                 {
-                    var maxLabel = flowLayoutPanel2.Controls[i] as Label;
+                    var maxLabel = flowLayoutPanel4.Controls[i] as Label;
                     string labelStr = maxTupple.Item1.ToString().Length>5? maxTupple.Item1.ToString().Substring(0,5): maxTupple.Item1.ToString();
                     maxLabel.Text = labelStr;
 
